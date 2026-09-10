@@ -1,0 +1,41 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-top:clamp(64px,7vw,96px)">
+    <div class="shell--narrow">
+      <p class="eyebrow">Search</p>
+      <h1 class="display" style="font-size:clamp(34px,4.6vw,62px)"><%= q ? '“' + q + '”' : 'What are you looking for?' %></h1>
+      <form method="get" action="/search" class="flex" style="margin:22px 0 34px">
+        <input type="search" name="q" value="<%= q %>" placeholder="desert, hammam, women-only, September, Fes…" style="flex:1;min-width:220px">
+        <button class="btn" type="submit">Search</button>
+      </form>
+
+      <% if (q) { %>
+        <p class="count"><%= results.length %> result<%= results.length === 1 ? '' : 's' %></p>
+        <div class="row-list" style="margin-top:12px">
+          <% results.forEach(function(r){ %>
+            <a class="row" href="<%= r.href %>" style="text-decoration:none">
+              <span class="row-day" style="font-family:var(--body);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-50)"><%= r.kind %></span>
+              <div><h4 style="font-size:24px"><%= r.label %></h4><p><%= r.note %></p></div>
+              <span class="link-arrow">Open</span>
+            </a>
+          <% }) %>
+          <% if (!results.length) { %>
+            <div class="callout" style="margin-top:20px"><h4>Nothing matched.</h4><p class="mb-0">Try a place, a month, or the kind of trip — “desert”, “students”, “honeymoon”. Or ask the assistant in the corner; it knows the catalogue.</p></div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <div class="pill-row">
+          <% ['luxury','desert','women-only','students','seniors','Marrakech','Fes','hammam','bespoke','September'].forEach(function(s){ %>
+            <a class="pill" href="/search?q=<%= encodeURIComponent(s) %>"><%= s %></a>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

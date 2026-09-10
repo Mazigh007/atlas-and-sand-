@@ -1,0 +1,89 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <section class="section" style="padding-top:clamp(64px,7vw,104px)">
+    <div class="shell">
+      <p class="eyebrow">Sitemap</p>
+      <h1 class="display" style="font-size:clamp(38px,5.4vw,74px)">Every page, in one place</h1>
+      <p class="lede">Journeys, tour types, destinations, planning notes, booking and our legal documents. The machine-readable version is at <a href="/sitemap.xml" style="border-bottom:1px solid var(--ink-30)">/sitemap.xml</a>.</p>
+
+      <div class="grid grid-4" style="margin-top:clamp(36px,5vw,64px)">
+        <div>
+          <h4>Start here</h4>
+          <ul class="check-list">
+            <li><a href="/">Home</a></li>
+            <li><a href="/journeys">All journeys</a></li>
+            <li><a href="/book">Plan my trip &amp; booking form</a></li>
+            <li><a href="/destinations">Destinations</a></li>
+            <li><a href="/journal">Journal</a></li>
+            <li><a href="/why-us">Why us</a></li>
+            <li><a href="/about">About us</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/search">Search</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Journey types</h4>
+          <ul class="check-list">
+            <li><a href="/tours/private">Private tours</a></li>
+            <li><a href="/tours/luxury">Luxury tours</a></li>
+            <li><a href="/tours/bespoke">Bespoke tours</a></li>
+            <li><a href="/tours/group">Group tours (10 – 30)</a></li>
+            <li><a href="/tours/group/women">Women-only group tours</a></li>
+            <li><a href="/tours/group/students">Student group tours</a></li>
+            <li><a href="/tours/group/seniors">Senior group tours</a></li>
+            <li><a href="/journeys?type=private">Browse private</a></li>
+            <li><a href="/journeys?type=luxury">Browse luxury</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Booking &amp; legal</h4>
+          <ul class="check-list">
+            <li><a href="/book">Booking form — 25% deposit</a></li>
+            <li><a href="/booking/lookup">Find my booking</a></li>
+            <li><a href="/faq">Booking FAQ</a></li>
+            <li><a href="/booking-conditions">Booking conditions</a></li>
+            <li><a href="/privacy-policy">Privacy policy</a></li>
+            <li><a href="/legal-terms">Legal terms &amp; conditions of sale</a></li>
+            <li><a href="/sitemap.xml">XML sitemap</a></li>
+            <li><a href="/robots.txt">Robots</a></li>
+            <li><a href="/api/health">Service status</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Destinations</h4>
+          <ul class="check-list">
+            <% destinations.forEach(function(d){ %><li><a href="/destinations/<%= d.slug %>"><%= d.name %></a></li><% }) %>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="rule">
+
+      <h2>Journeys</h2>
+      <div class="grid grid-3">
+        <% Object.values(CATEGORIES).forEach(function(cat){ const items = journeys.filter(j => j.category === cat.slug); if (!items.length) return; %>
+          <div>
+            <h4><%= cat.name %></h4>
+            <ul class="check-list">
+              <% items.forEach(function(j){ %><li><a href="/journeys/<%= j.slug %>"><%= j.name %></a><br><span class="small muted"><%= j.nights %> nights · from $<%= j.priceFrom.toLocaleString('en-US') %> pp</span></li><% }) %>
+            </ul>
+          </div>
+        <% }) %>
+        <div>
+          <h4>Journal</h4>
+          <ul class="check-list">
+            <% posts.forEach(function(p){ %><li><a href="/journal/<%= p.slug %>"><%= p.title %></a><br><span class="small muted"><%= p.category %> · <%= p.read %></span></li><% }) %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

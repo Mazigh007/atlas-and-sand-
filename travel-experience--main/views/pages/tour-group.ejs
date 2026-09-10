@@ -1,0 +1,135 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: t.hero,
+    kicker: t.eyebrow,
+    title: 'Group tours in Morocco',
+    lede: 'Ten to thirty travellers, four kinds of group, one price band. From $2,000 to $4,000 per person — and the price falls as your party grows.',
+    crumbs: [{ label: 'Journeys', href: '/journeys' }, { label: 'Group tours' }],
+    actions: [{ href: '/book?category=group&travellers=20', label: 'Price my group' }, { href: '/journeys?type=group', label: 'See departures' }],
+    stats: [
+      { v: '10–30', l: 'travellers per departure' },
+      { v: '$2,000', l: 'per person at the floor' },
+      { v: '$4,000', l: 'per person at 10 travellers' },
+      { v: config.deposit.percent + '%', l: 'group deposit' }
+    ]
+  } }) %>
+
+  <section class="section">
+    <div class="shell">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Three groups we build for specifically</p>
+          <h2>Who is on the trip</h2>
+          <p class="lede">Most operators run one shared departure and call it inclusive. We would rather design for the way people actually travel: a party of women who want the hammam to themselves, a student group that needs a safeguarding pack and a $2,000 ceiling, and travellers over 55 who want three hotel changes in eight nights instead of eight.</p>
+          <p>Every group journey can also be taken privately by your own 10 – 30 people — you pick the date, we price the whole party inside the same band.</p>
+        </div>
+        <div class="grid" style="gap:14px">
+          <% ['women','students','seniors'].forEach(function(k){ const a = audiences[k]; %>
+            <a class="card reveal" href="/tours/group/<%= a.slug %>" style="flex-direction:row;align-items:stretch">
+              <div class="card-media" style="width:130px;flex:0 0 130px;aspect-ratio:auto"><img src="<%= a.hero %>" alt="<%= a.name %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+              <div class="card-body">
+                <span class="eyebrow eyebrow--plain" style="margin:0"><%= a.eyebrow %></span>
+                <h3 style="font-size:25px"><%= a.name %></h3>
+                <p><%= a.from ? '$' + a.from.toLocaleString('en-US') : '' %>–$<%= a.to.toLocaleString('en-US') %> pp · <%= a.promises[0] %></p>
+                <span class="link-arrow">Read more</span>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper" id="pricing">
+    <div class="shell">
+      <div class="section-head">
+        <div><p class="eyebrow">The band, explained</p><h2>Price is set by your group size</h2></div>
+        <p>Within our $2,000 – $4,000 band, per-person price falls as the party grows, because the coach, the leaders and the fixed guide fees are shared by more people. Move the slider — it prices live.</p>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px);align-items:start" data-group-calc>
+        <div class="callout" style="background:var(--white)">
+          <label class="field" style="margin-bottom:20px">
+            <span style="display:flex;justify-content:space-between"><b style="font-size:11px;letter-spacing:.15em;text-transform:uppercase">Travellers</b><b id="gcPeople" class="mono-num">20</b></span>
+            <input type="range" id="gcSize" min="10" max="30" step="1" value="20" aria-label="Number of travellers">
+            <span class="hint">We never run below 10 and never above 30. Anything larger becomes a private departure.</span>
+          </label>
+          <label class="field" style="margin-bottom:20px">
+            <span style="display:flex;justify-content:space-between"><b style="font-size:11px;letter-spacing:.15em;text-transform:uppercase">Nights</b><b id="gcNightsLabel" class="mono-num">7</b></span>
+            <input type="range" id="gcNights" min="5" max="12" step="1" value="7" aria-label="Number of nights">
+          </label>
+          <label class="field">
+            <b style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:7px">Departure window</b>
+            <select id="gcDate" style="max-width:280px">
+              <option value="">Shoulder season</option>
+              <option value="2026-04-12">April 2026 — shoulder</option>
+              <option value="2026-07-12">July 2026 — peak, hot inland</option>
+              <option value="2026-09-13">September 2026 — shoulder</option>
+              <option value="2026-12-18">December 2026 — peak</option>
+            </select>
+          </label>
+        </div>
+        <div class="summary" style="position:static">
+          <h3 id="gcHead">Group of 20 · 7 nights</h3>
+          <ul class="sum-lines">
+            <li><span>Per person</span><span id="gcPer">—</span></li>
+            <li><span>Group total</span><span id="gcTotal">—</span></li>
+            <li><span><%= config.deposit.percent %>% deposit now</span><span id="gcDeposit">—</span></li>
+            <li><span>Balance, <%= config.deposit.balanceDueDaysBefore %> days out</span><span id="gcBalance">—</span></li>
+          </ul>
+          <p class="sum-note" id="gcNote">Indicative band pricing for a shared departure; specific departures have their own floors.</p>
+          <div class="sum-deposit"><div><span>Ready to hold a date?</span><b id="gcDeposit2">—</b></div><a class="btn btn--light" href="/book?category=group">Book my group</a></div>
+        </div>
+      </div>
+
+      <div style="margin-top:44px">
+        <table class="data">
+          <thead><tr><th>Group size</th><th>Per person, 7 – 10 nights</th><th>Deposit at <%= config.deposit.percent %>%</th><th>What changes</th></tr></thead>
+          <tbody>
+            <% [10,15,20,25,30].forEach(function(n){ const p = 4000 - (n-10)/20*2000; %>
+              <tr>
+                <td><b><%= n %> travellers</b></td>
+                <td class="mono-num">$<%= Math.round(p).toLocaleString('en-US') %></td>
+                <td class="mono-num">$<%= Math.round(p*n/4).toLocaleString('en-US') %></td>
+                <td><%= n<=12 ? 'Two trip leaders, minibus fleet or single coach' : n<=20 ? 'One coach, two leaders, one WhatsApp group' : n<=26 ? 'One coach, three leaders, split dining at riads' : 'Two coaches with a lead car — still one itinerary' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <p class="small muted">A women-only 7-night departure has a $2,800 floor at 30 travellers; the 10-night Student Discovery reaches $2,000 at 28 – 30; senior departures are capped at 20 for comfort, so their best published rate is $3,000. The booking form prices your exact party against the exact departure.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">On the shelf</p><h2>Group departures you can join</h2></div><a class="link-arrow" href="/journeys?type=group">All group journeys</a></div>
+      <div class="grid grid-3"><% list.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %></div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--paper">
+    <div class="shell">
+      <div class="grid grid-2">
+        <div>
+          <p class="eyebrow">What is always in the price</p>
+          <ul class="check-list"><% t.bullets.forEach(function(b){ %><li><%= b %></li><% }) %></ul>
+        </div>
+        <div>
+          <p class="eyebrow">How a group booking runs</p>
+          <ul class="check-list"><% t.howItWorks.forEach(function(s){ %><li><b><%= s[0] %></b> — <%= s[1] %></li><% }) %></ul>
+          <a class="btn" href="/book?category=group&travellers=20">Start a group booking</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

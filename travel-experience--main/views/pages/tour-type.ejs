@@ -1,0 +1,99 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: t.hero,
+    kicker: t.eyebrow,
+    title: t.name + ' in Morocco',
+    lede: t.lede,
+    crumbs: [{ label: 'Journeys', href: '/journeys' }, { label: t.name }],
+    actions: [{ href: '/book?category=' + t.slug, label: 'Price this with me' }, { href: '/journeys?type=' + t.slug, label: 'See the itineraries' }],
+    stats: [
+      { v: '$' + t.from.toLocaleString('en-US'), l: 'from, per person' },
+      { v: t.to ? '$' + t.to.toLocaleString('en-US') : '7–10', l: t.to ? 'top of the band at 10 travellers' : 'nights typical' },
+      { v: config.deposit.percent + '%', l: 'deposit to book' },
+      { v: String(list.length), l: 'journeys on file' }
+    ]
+  } }) %>
+
+  <section class="section">
+    <div class="shell layout-detail">
+      <div>
+        <p class="eyebrow">What this means</p>
+        <h2>How the money works on <%= t.name.toLowerCase() %></h2>
+        <p class="lede"><%= t.priceNote %></p>
+        <ul class="check-list" style="margin-top:6px">
+          <% t.bullets.forEach(function(b){ %><li><%= b %></li><% }) %>
+        </ul>
+
+        <h3 style="margin-top:48px">How it works, start to finish</h3>
+        <div class="row-list">
+          <% t.howItWorks.forEach(function(step, i){ %>
+            <article class="row">
+              <span class="row-day"><%= String(i + 1).padStart(2, '0') %></span>
+              <div><h4><%= step[0] %></h4><p><%= step[1] %></p></div>
+              <div class="row-meta">Step <%= i + 1 %> of <%= t.howItWorks.length %></div>
+            </article>
+          <% }) %>
+        </div>
+
+        <% if (t.included) { %>
+          <div class="grid grid-2" style="margin-top:44px">
+            <div><h3>Always included</h3><ul class="check-list"><% t.included.forEach(function(x){ %><li><%= x %></li><% }) %></ul></div>
+            <div><h3>Priced separately</h3><ul class="check-list check-list--x"><% t.notIncluded.forEach(function(x){ %><li><%= x %></li><% }) %></ul></div>
+          </div>
+        <% } %>
+
+        <% if (t.examples) { %>
+          <h3 style="margin-top:44px">Recently designed for real travellers</h3>
+          <ul class="check-list"><% t.examples.forEach(function(x){ %><li><%= x %></li><% }) %></ul>
+        <% } %>
+
+        <% if (t.ideal) { %>
+          <div class="callout" style="margin-top:34px"><h4><%= t.name %> are right for</h4><p class="mb-0"><%= t.ideal %></p></div>
+        <% } %>
+      </div>
+
+      <aside>
+        <div class="summary">
+          <h3><%= t.name %></h3>
+          <p class="sum-journey"><%= t.unit %></p>
+          <ul class="sum-lines">
+            <li><span>From</span><span><%= config.currencySymbol %><%= t.from.toLocaleString('en-US') %> pp</span></li>
+            <% if (t.to) { %><li><span>At 10 travellers</span><span><%= config.currencySymbol %><%= t.to.toLocaleString('en-US') %> pp</span></li><% } %>
+            <li><span>Deposit today</span><span><%= config.currencySymbol %><%= Math.round(t.from * config.deposit.percent / 100).toLocaleString('en-US') %> pp</span></li>
+            <li><span>Balance</span><span><%= config.deposit.balanceDueDaysBefore %> days out</span></li>
+          </ul>
+          <div class="sum-deposit"><div><span>Card via Stripe</span><b>No booking fee</b></div><a class="btn btn--light" href="/book?category=<%= t.slug %>">Start</a></div>
+          <p class="sum-note">Deposit is <%= config.deposit.percent %>% of the trip total and non-refundable, per our <a href="/booking-conditions" style="text-decoration:underline">booking conditions</a>.</p>
+        </div>
+        <div class="callout" style="margin-top:20px">
+          <h4>Ask us directly</h4>
+          <p class="small">Marrakech <a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneMa %></a><br>USA <a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneUsa %></a><br><a href="mailto:<%= config.contact.emailBookings %>" style="text-decoration:underline"><%= config.contact.emailBookings %></a></p>
+          <a class="btn btn--sm btn--wide btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Hi — I would like to talk about ' + t.name + ' in Morocco.') %>">WhatsApp us</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">On the shelf, ready to adapt</p><h2><%= t.name %> we run now</h2></div><a class="link-arrow" href="/journeys?type=<%= t.slug %>">Filter the catalogue</a></div>
+      <div class="grid grid-3"><% list.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %></div>
+    </div>
+  </section>
+
+  <section class="section section--ink section--tight">
+    <div class="shell flex between">
+      <div><h3 style="color:#fff;margin:0 0 6px">Not sure whether <%= t.slug === 'group' ? 'a group or a private tour' : 'this is the right shape' %>?</h3><p class="small mb-0">Two minutes in the chat, or ask the assistant in the corner — it knows the prices, the deposits and the cancellation scale.</p></div>
+      <div class="flex"><a class="btn btn--light" href="/faq">Read the FAQ</a><a class="btn btn--light" href="/contact">Talk to a designer</a></div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/hero-medina.jpg',
+    kicker: 'Contact',
+    title: 'Talk to a designer',
+    lede: 'Two offices, three channels, one promise: a named person replies within one business day, and within 30 minutes if you are already travelling with us.',
+    crumbs: [{ label: 'Contact' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell">
+      <div class="grid grid-3">
+        <div class="callout reveal">
+          <p class="eyebrow" style="margin-bottom:8px">Marrakech</p>
+          <h3 style="font-size:30px"><a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneMa %></a></h3>
+          <p class="small mb-0">Phone &amp; WhatsApp · Mon–Sat 08:30–19:30 (GMT+1)<br><%= config.brand.address.line1 %><br><%= config.brand.address.line2 %></p>
+          <p style="margin-top:16px"><a class="btn btn--sm btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Salam! I have a question about a Morocco trip.') %>">Message on WhatsApp</a></p>
+        </div>
+        <div class="callout reveal">
+          <p class="eyebrow" style="margin-bottom:8px">USA · Los Angeles</p>
+          <h3 style="font-size:30px"><a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneUsa %></a></h3>
+          <p class="small mb-0">Phone &amp; WhatsApp · Mon–Fri 07:00–17:00 Pacific<br><%= config.brand.address.line3 %><br>24/7 duty line for travellers in Morocco</p>
+          <p style="margin-top:16px"><a class="btn btn--sm btn--whatsapp" href="https://wa.me/<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>?text=<%= encodeURIComponent('Hello! I have a question about a Morocco trip.') %>">Message on WhatsApp</a></p>
+        </div>
+        <div class="callout reveal">
+          <p class="eyebrow" style="margin-bottom:8px">E-mail</p>
+          <h3 style="font-size:26px"><a href="mailto:<%= config.contact.emailBookings %>"><%= config.contact.emailBookings %></a></h3>
+          <p class="small mb-0">Groups, institutions and partners: <a href="mailto:<%= config.contact.emailTeam %>" style="text-decoration:underline"><%= config.contact.emailTeam %></a><br>Privacy questions: privacy@moroccanexperience.com</p>
+          <p class="small" style="margin:16px 0 0"><a class="link-arrow" href="/faq">Answers to the usual questions</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell layout-detail">
+      <div>
+        <p class="eyebrow">Or send it here</p>
+        <h2>A short form, honestly answered</h2>
+        <p class="lede">This creates an enquiry record — no payment, no deposit, nothing to cancel. If you want prices in writing, the booking form will quote you live and let you pay the 25% deposit there.</p>
+        <form method="post" action="/book" class="field-grid" style="margin-top:28px">
+          <input type="hidden" name="mode" value="enquiry">
+          <input type="hidden" name="company_website" value="" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="field"><span>First name</span><input type="text" name="firstName" required autocomplete="given-name"></label>
+          <label class="field"><span>Last name</span><input type="text" name="lastName" required autocomplete="family-name"></label>
+          <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="email"></label>
+          <label class="field"><span>Phone (with country code)</span><input type="tel" name="phone" required placeholder="+1 …" autocomplete="tel"></label>
+          <label class="field"><span>Country</span><input type="text" name="country" autocomplete="country-name" placeholder="United States"></label>
+          <label class="field"><span>Approximate dates</span><input type="text" name="startDate" placeholder="e.g. late April 2027"></label>
+          <label class="field full"><span>What are you picturing?</span><textarea name="notes" placeholder="Who is coming, how many nights, what you want to come home with, anything that must be arranged (a wedding, a permit, a knee that hates stairs)."></textarea></label>
+          <label class="check full"><input type="checkbox" name="acceptPrivacy" required> I have read and accept the <a href="/privacy-policy" target="_blank" rel="noopener">privacy policy</a> and understand this creates an enquiry, not a booking.</label>
+          <div class="full flex"><button class="btn" type="submit">Send enquiry</button><a class="link-arrow" href="/book">Or price &amp; book a journey →</a></div>
+        </form>
+      </div>
+      <aside>
+        <div class="callout">
+          <h4>Hours &amp; time zones</h4>
+          <% config.contact.hours.forEach(function(h){ %><p class="small" style="margin:0 0 12px"><b style="font-weight:600"><%= h.tz %></b><br><%= h.days %> · <%= h.time %></p><% }) %>
+          <p class="small mb-0"><%= config.contact.emergencyNote %></p>
+        </div>
+        <div class="callout" style="margin-top:16px">
+          <h4>Fastest for groups</h4>
+          <p class="small mb-0">If you are organising 10 – 30 travellers, include your institution name and finance deadline. We will send a PO-ready invoice and a group sheet for your travellers to pay individually.</p>
+          <p style="margin-top:14px"><a class="btn btn--sm btn--wide" href="/book?category=group&travellers=20">Price a group</a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

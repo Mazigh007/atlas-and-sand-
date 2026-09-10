@@ -1,0 +1,93 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: a.hero,
+    kicker: a.eyebrow,
+    title: a.name,
+    lede: a.lede,
+    crumbs: [{ label: 'Journeys', href: '/journeys' }, { label: 'Group tours', href: '/tours/group' }, { label: a.name }],
+    actions: [{ href: '/book?category=group&travellers=20&nights=7', label: 'Book or enquire' }, { href: '/journeys?type=group&audience=' + a.slug, label: 'See the itineraries' }],
+    stats: [
+      { v: '$' + a.from.toLocaleString('en-US'), l: 'from, per person' },
+      { v: '$' + a.to.toLocaleString('en-US'), l: 'at the smallest group size' },
+      { v: '10–30', l: 'travellers per departure' },
+      { v: config.deposit.percent + '%', l: 'deposit, then 60-day balance' }
+    ]
+  } }) %>
+
+  <section class="section">
+    <div class="shell layout-detail">
+      <div>
+        <p class="eyebrow">What we promise</p>
+        <h2>Designed for this group, not adapted</h2>
+        <div class="prose"><p><%= a.lede %></p></div>
+        <ul class="check-list">
+          <% a.promises.forEach(function(p){ %><li><%= p %></li><% }) %>
+        </ul>
+
+        <h3 style="margin-top:44px">What to expect on the ground</h3>
+        <div class="row-list">
+          <% a.whatToExpect.forEach(function(x, i){ %>
+            <article class="row"><span class="row-day"><%= String(i+1).padStart(2,'0') %></span><div><p class="mb-0"><%= x %></p></div><div class="row-meta">Note</div></article>
+          <% }) %>
+        </div>
+
+        <div class="callout" style="margin-top:34px">
+          <h4>Pricing for this kind of group</h4>
+          <p class="mb-0"><%= a.priceNote %> A <%= config.deposit.percent %>% deposit holds the places; the balance falls due <%= config.deposit.balanceDueDaysBefore %> days before departure. Full terms are in the <a href="/booking-conditions" style="text-decoration:underline">booking conditions</a>.</p>
+        </div>
+      </div>
+      <aside>
+        <div class="summary">
+          <h3><%= a.name %></h3>
+          <p class="sum-journey">Shared or private departure · 10 – 30 travellers</p>
+          <ul class="sum-lines">
+            <li><span>Floor, largest group</span><span>$<%= a.from.toLocaleString('en-US') %> pp</span></li>
+            <li><span>At 10 travellers</span><span>$<%= a.to.toLocaleString('en-US') %> pp</span></li>
+            <li><span>Deposit at <%= config.deposit.percent %>%</span><span>$<%= Math.round(a.from*0.25).toLocaleString('en-US') %> pp</span></li>
+          </ul>
+          <div class="sum-deposit"><div><span>Next step</span><b>No obligation</b></div><a class="btn btn--light" href="/book?category=group">Start</a></div>
+          <p class="sum-note">Pay by card through Stripe, or ask for an invoice if you are booking through a school, club or employer.</p>
+        </div>
+        <div class="callout" style="margin-top:20px">
+          <h4>Questions a form cannot answer</h4>
+          <p class="small mb-0">The assistants in the corner know this itinerary. Or call: <a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneMa %></a> (Morocco) · <a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneUsa %></a> (USA).</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">Departments that run for this group</p><h2>Where you would travel</h2></div><a class="link-arrow" href="/journeys?audience=<%= a.slug %>">Filter</a></div>
+      <div class="grid grid-3"><% list.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell--mid">
+      <p class="eyebrow">Straight answers</p>
+      <div class="acc">
+        <details open><summary>Why a group and not a private tour?</summary><div class="acc-body"><p>Because at this size a group is often better, not merely cheaper: two leaders instead of one, local guides in every region, a coach that carries everybody's luggage, and a per-person price that a private tour at the same standard cannot touch. You give up the right to change your mind at 9 a.m.</p></div></details>
+        <details><summary>What if we have fewer than 10 travellers?</summary><div class="acc-body"><p>Then we run the same itinerary privately, which is usually $2,900 – $4,200 pp at that size — or we pair you into a published departure where there is room. Say the word in the booking form and we will price both so you can choose.</p></div></details>
+        <details><summary>Can we take our own group on a published date?</summary><div class="acc-body"><p>Yes: buy out a departure for your 10 – 30 people, keep the date, and the price is set by the band above. Most commonly done by universities, clubs and families travelling together.</p></div></details>
+        <details><summary>Single rooms and rooming</summary><div class="acc-body"><p>Twin share is the quoted price. A single is available at cost across all our properties and is never forced. Solo travellers on our women-only departures pay no single supplement at all — we pair you or hold the room at our own expense.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--ink">
+    <div class="shell flex between">
+      <div><h3 style="color:#fff;margin:0 0 6px">Put dates on it</h3><p class="small mb-0">Fill the booking form and we will confirm availability for your party within one business day — no obligation until you approve the proposal.</p></div>
+      <a class="btn btn--light" href="/book?category=group">Plan my trip</a>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

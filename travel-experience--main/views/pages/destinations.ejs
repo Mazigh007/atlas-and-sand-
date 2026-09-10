@@ -1,0 +1,53 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/hero-desert.jpg',
+    title: 'Destinations',
+    kicker: 'Where to go, and when',
+    lede: 'Eight Moroccos. A country the size of California with Atlas snow, Sahara sand, two coastlines and a Roman ruin in nearly every valley.',
+    crumbs: [{ label: 'Destinations' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell">
+      <div class="grid grid-2">
+        <% destinations.forEach(function(d){ %>
+          <a class="card reveal" href="/destinations/<%= d.slug %>" style="flex-direction:row;align-items:stretch;background:transparent;border:0">
+            <div class="card-media" style="flex:0 0 42%;aspect-ratio:3/4"><img src="<%= d.image %>" alt="<%= d.name %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+            <div class="card-body" style="padding:6px 0 6px 22px">
+              <span class="eyebrow eyebrow--plain" style="margin:0"><%= d.region %> · best <%= d.best %></span>
+              <h3 style="font-size:clamp(26px,2.4vw,34px)"><%= d.name %></h3>
+              <p style="font-size:15px"><%= d.blurb.length > 210 ? d.blurb.slice(0,210).replace(/\s+\S*$/,'') + '…' : d.blurb %></p>
+              <span class="link-arrow">Explore <%= d.name %></span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--paper">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">Where to go when</p><h2>The month-by-month</h2></div></div>
+      <table class="data">
+        <thead><tr><th>Months</th><th>Go to</th><th>Because</th><th>Avoid</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mar – May</b></td><td>Atlas, Rose Valley, Fes, Marrakech</td><td>Meadow green, 24 °C, blossom in Kelaa M’Gouna in May</td><td>Nothing much — our favourite window</td></tr>
+          <tr><td><b>Jun</b></td><td>Essaouira, Tangier, the Rif</td><td>Coast wind, mountain cool, long evenings</td><td>Deep south after the 20th</td></tr>
+          <tr><td><b>Jul – Aug</b></td><td>Coast and 2,000 m upward</td><td>Long daylight, warm sea, dry mountain air</td><td>Marrakech at midday and the dunes in July</td></tr>
+          <tr><td><b>Sep – Nov</b></td><td>Sahara, imperial cities, surf coast</td><td>Warm dunes, cool mornings, harvest markets</td><td>Nov afternoons in the Rif, which get rain</td></tr>
+          <tr><td><b>Dec – Feb</b></td><td>Merzouga, Agafay, Marrakech riads</td><td>Sun by day, fires at night, no crowds, best prices</td><td>Toubkal unless you want winter mountaineering</td></tr>
+        </tbody>
+      </table>
+      <p class="flex"><a class="btn" href="/journeys">Find a journey that fits your dates</a><a class="link-arrow" href="/journal/how-to-plan-a-trip-to-morocco">Planning guide</a></p>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-block:clamp(90px,14vw,180px)">
+    <div class="shell--narrow">
+      <p class="eyebrow">Error 500</p>
+      <h1 class="display" style="font-size:clamp(38px,5vw,68px)">Something broke on our side</h1>
+      <p class="lede">Not yours — ours. The team has been notified. If you were mid-payment, do not submit it twice: any duplicate charge is refunded automatically once Stripe reconciles.</p>
+      <% if (typeof error === 'string' && error) { %><pre class="small" style="background:var(--paper-2);padding:14px;border-radius:4px;overflow:auto"><%= error %></pre><% } %>
+      <p class="flex" style="margin-top:26px">
+        <a class="btn" href="/">Back to the home page</a>
+        <a class="btn btn--ghost" href="/book">Try the booking form again</a>
+        <a class="btn btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>">WhatsApp <%= config.contact.phoneMa %></a>
+      </p>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <section class="page-hero">
+    <div class="hero-media"><img src="<%= j.image %>" alt="<%= j.name %>" fetchpriority="high" onerror="this.classList.add('is-missing')"></div>
+    <div class="shell hero-inner">
+      <nav class="crumbs"><a href="/">Home</a> / <a href="/journeys">Journeys</a> / <a href="/tours/<%= j.category %>"><%= j.tourType.name %></a> / <%= j.name %></nav>
+      <div class="card-tag" style="position:static;margin-bottom:16px">
+        <span class="tag tag--light"><%= j.tourType.name %></span>
+        <% if (j.audience) { %><span class="tag tag--clay">For <%= j.audience %></span><% } %>
+        <span class="tag"><%= j.nights %> nights</span>
+      </div>
+      <h1 class="display"><%= j.name %></h1>
+      <p class="lede"><%= j.summary %></p>
+      <div class="hero-actions">
+        <a class="btn" style="background:#fff;border-color:#fff;color:var(--ink)" href="/book?journey=<%= j.slug %>&travellers=<%= sampleParty %>">Book — 25% deposit</a>
+        <a class="btn btn--light" href="#itinerary">See the day-by-day</a>
+      </div>
+      <div class="hero-foot">
+        <span>From <b style="color:#fff">$<%= j.priceFrom.toLocaleString('en-US') %></b> per person</span>
+        <span><%= j.days %> days / <%= j.nights %> nights</span>
+        <span><%= j.groupSize %></span>
+        <span>Pace: <%= j.pace %></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" style="border-bottom:1px solid var(--ink-12)">
+    <div class="shell stats">
+      <div class="stat"><b><%= j.nights %></b><span>Nights</span></div>
+      <div class="stat"><b>$<%= j.priceFrom.toLocaleString('en-US') %></b><span>From, per person<%= j.priceMax ? ` (up to $${j.priceMax.toLocaleString('en-US')} for a group of 10)` : '' %></span></div>
+      <div class="stat"><b><%= preview.depositPercent %>%</b><span>Deposit today — <b style="font-size:inherit">$<%= Math.round(preview.deposit / sampleParty).toLocaleString('en-US') %></b> pp</span></div>
+      <div class="stat"><b><%= j.feeling ? j.feeling : 'Tailor' %></b><span>How it leaves you feeling</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell layout-detail">
+      <div>
+        <p class="eyebrow">The journey</p>
+        <h2>What the week actually feels like</h2>
+        <div class="prose">
+          <p><%= j.summary %></p>
+          <% if (j.audienceNote) { %><p><strong>Who it is for.</strong> <%= j.audienceNote %></p><% } %>
+          <p><strong>Season.</strong> <%= j.season %>. <strong>Pace.</strong> <%= j.pace %>. <strong>Party.</strong> <%= j.groupSize %>.</p>
+        </div>
+
+        <h3 style="margin-top:44px">Highlights</h3>
+        <ul class="check-list">
+          <% j.highlights.forEach(function(h){ %><li><%= h %></li><% }) %>
+        </ul>
+
+        <% if (j.luxuryExtras) { %>
+          <div class="callout" style="margin-top:10px">
+            <h4>At this level, also possible</h4>
+            <ul class="check-list" style="margin-bottom:0">
+              <% j.luxuryExtras.forEach(function(x){ %><li><%= x %></li><% }) %>
+            </ul>
+          </div>
+        <% } %>
+
+        <h3 id="itinerary" style="margin-top:52px">Day by day</h3>
+        <div class="row-list">
+          <% j.itinerary.forEach(function(d){ %>
+            <article class="row">
+              <span class="row-day"><%= String(d.day).padStart(2,'0') %></span>
+              <div>
+                <h4><%= d.title %></h4>
+                <p><%= d.text %></p>
+              </div>
+              <div class="row-meta"><%= d.meals %><br><span class="muted"><%= d.stay %></span></div>
+            </article>
+          <% }) %>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:48px">
+          <div>
+            <h3>Included</h3>
+            <ul class="check-list">
+              <% j.includes.forEach(function(x){ %><li><%= x %></li><% }) %>
+            </ul>
+          </div>
+          <div>
+            <h3>Not included</h3>
+            <ul class="check-list check-list--x">
+              <% j.excludes.forEach(function(x){ %><li><%= x %></li><% }) %>
+            </ul>
+          </div>
+        </div>
+
+        <% if (j.departures && j.departures.length) { %>
+          <h3 style="margin-top:44px">2026 – 27 departure dates</h3>
+          <p class="lede" style="font-size:16px">Group journeys run on fixed dates with 10 – 30 travellers. Any of them can also be taken privately on the date you choose.</p>
+          <div class="pill-row" style="margin-top:14px">
+            <% j.departures.forEach(function(dt){ %>
+              <a class="pill" href="/book?journey=<%= j.slug %>&startDate=<%= dt %>&travellers=<%= sampleParty %>"><%= new Date(dt + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) %></a>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- sticky price / booking panel -->
+      <aside>
+        <div class="summary">
+          <h3>Price for this journey</h3>
+          <p class="sum-journey"><%= j.nights %> nights · <%= sampleParty %> travellers · <%= preview.season.label.toLowerCase() %></p>
+          <ul class="sum-lines">
+            <li><span>Per person</span><span><%= preview.formatted.perPerson %></span></li>
+            <% preview.lines.forEach(function(l){ %><li class="<%= l.kind === 'discount' ? 'disc' : '' %>"><span><%= l.label %></span><span><%= l.amount < 0 ? '−' : '' %>$<%= Math.abs(Math.round(l.amount)).toLocaleString('en-US') %></span></li><% }) %>
+            <li><span>Trip total (<%= sampleParty %> people)</span><span><%= preview.formatted.tripTotal %></span></li>
+            <li><span>Balance, <%= preview.balanceDueDaysBefore %> days before departure</span><span><%= preview.formatted.balance %></span></li>
+          </ul>
+          <div class="sum-deposit">
+            <div><span>Pay today · <%= preview.depositPercent %>% deposit</span><b><%= preview.formatted.deposit %></b></div>
+            <a class="btn btn--light" href="/book?journey=<%= j.slug %>&travellers=<%= sampleParty %>&nights=<%= j.nights %>">Book now</a>
+          </div>
+          <p class="sum-note">Prices are indicative for planning. Your designer confirms the exact rate for your dates before anything is taken — the deposit is only charged on a proposal you approve. <a href="/booking-conditions" style="text-decoration:underline">Booking conditions</a>.</p>
+        </div>
+
+        <div class="callout" style="margin-top:20px">
+          <h4>Talk to us about this one</h4>
+          <p class="small" style="margin-bottom:12px">Ask about dates, rooming, or whether eight nights would suit you better than seven.</p>
+          <a class="btn btn--sm btn--wide btn--whatsapp" style="margin-bottom:8px" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Salam — I have a question about “' + j.name + '” (' + j.nights + ' nights).') %>">WhatsApp <%= config.contact.phoneMa %></a>
+          <a class="btn btn--sm btn--wide btn--ghost" href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>">USA <%= config.contact.phoneUsa %></a>
+        </div>
+
+        <div class="img-frame img-frame--34 reveal" style="margin-top:20px">
+          <img src="<%= j.image %>" alt="<%= j.name %>" loading="lazy" onerror="this.classList.add('is-missing')">
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <% if (linkedDestinations.length) { %>
+    <section class="section section--tight section--paper">
+      <div class="shell">
+        <p class="eyebrow">Where you will be</p>
+        <div class="grid grid-3">
+          <% linkedDestinations.forEach(function(d){ %>
+            <a class="card reveal" href="/destinations/<%= d.slug %>" style="border:0;background:transparent">
+              <div class="card-media" style="aspect-ratio:16/10"><img src="<%= d.image %>" alt="<%= d.name %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+              <div class="card-body" style="padding-inline:0"><h3 style="font-size:24px"><%= d.name %></h3><p><%= d.tagline %></p></div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <% if (related.length) { %>
+    <section class="section">
+      <div class="shell">
+        <div class="section-head"><div><p class="eyebrow">Also worth considering</p><h2>Similar journeys</h2></div><a class="link-arrow" href="/journeys">All journeys</a></div>
+        <div class="grid grid-3">
+          <% related.forEach(function(r){ %><%- include('../partials/journey-card', { j: r }) %> <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <section class="section section--tight">
+    <div class="shell--narrow">
+      <p class="eyebrow">Before you book</p>
+      <div class="acc">
+        <details open><summary>How does payment work on this journey?</summary><div class="acc-body"><p>A <%= commercial.depositPercent %>% deposit (<%= preview.formatted.deposit %> for <%= sampleParty %> people at these dates) is taken by card through Stripe or by bank transfer, and secures the rooms and guides. The balance of <%= preview.formatted.balance %> falls due <%= commercial.balanceDueDaysBefore %> days before departure. The deposit is non-refundable but is not lost if we cancel.</p></div></details>
+        <details><summary>What are the cancellation charges?</summary><div class="acc-body"><p>More than 90 days out you lose the deposit only; 90–60 days, 50% of the trip cost; 59–30 days, 75%; 29–15 days, 90%; under 15 days, 100%. Insurance covers most of that when the reason is covered. Full detail is in the <a href="/booking-conditions">booking conditions</a>.</p></div></details>
+        <details><summary>Can the itinerary be changed?</summary><div class="acc-body"><p>Yes — this is a starting point, not a package. Nights can be added or removed, properties swapped, and the whole thing rebuilt around you. Amendment fee <%= config.currencySymbol %><%= commercial.amendmentFeePerPerson %> per person applies before the balance date, plus any supplier charge.</p></div></details>
+        <details><summary>Is international travel included?</summary><div class="acc-body"><p>No. We arrange flights as your agent at the published fare plus $40 per person ticketing, and hold seats for 48 hours while you decide.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

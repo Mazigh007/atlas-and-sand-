@@ -1,0 +1,69 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <section class="page-hero" style="min-height:46vh">
+    <div class="hero-media"><img src="/img/hero-medina.jpg" alt="Morocco journeys" fetchpriority="high" onerror="this.classList.add('is-missing')"></div>
+    <div class="shell hero-inner">
+      <nav class="crumbs"><a href="/">Home</a> / Journeys</nav>
+      <h1 class="display">Journeys</h1>
+      <p class="lede">Twelve tailor-made itineraries across Morocco — private, luxury, bespoke and group. Every price below is a genuine floor for the shoulder season at the stated party size, and every one of them can be changed.</p>
+    </div>
+  </section>
+
+  <div class="shell">
+    <div class="filters">
+      <div class="pill-row">
+        <a class="pill <%= !filters.type ? 'is-active' : '' %>" href="/journeys<%= filters.audience ? '?audience=' + filters.audience : '' %>">All</a>
+        <% Object.values(CATEGORIES).forEach(function(c){ %>
+          <a class="pill <%= filters.type === c.slug ? 'is-active' : '' %>" href="/journeys?type=<%= c.slug %><%= filters.audience ? '&audience=' + filters.audience : '' %>"><%= c.name %></a>
+        <% }) %>
+        <span style="width:1px;height:22px;background:var(--ink-12);margin:0 6px"></span>
+        <% ['women','students','seniors'].forEach(function(a){ %>
+          <a class="pill <%= filters.audience === a ? 'is-active' : '' %>" href="/journeys?audience=<%= a %>"><%= a %></a>
+        <% }) %>
+      </div>
+      <form method="get" action="/journeys" class="flex" style="gap:8px">
+        <% if (filters.type) { %><input type="hidden" name="type" value="<%= filters.type %>"><% } %>
+        <select name="nights" aria-label="Minimum nights" onchange="this.form.submit()">
+          <option value="">Any length</option>
+          <% [3,5,7,8,10].forEach(function(n){ %><option value="<%= n %>" <%= String(filters.nights) === String(n) ? 'selected' : '' %>>From <%= n %> nights</option><% }) %>
+        </select>
+        <select name="sort" aria-label="Sort" onchange="this.form.submit()">
+          <option value="">Sort: featured</option>
+          <option value="price-asc" <%= filters.sort === 'price-asc' ? 'selected' : '' %>>Price, low to high</option>
+          <option value="price-desc" <%= filters.sort === 'price-desc' ? 'selected' : '' %>>Price, high to low</option>
+          <option value="nights" <%= filters.sort === 'nights' ? 'selected' : '' %>>Shortest first</option>
+        </select>
+        <input type="search" name="q" value="<%= filters.q || '' %>" placeholder="Search journeys" style="width:170px">
+        <button class="btn btn--sm" type="submit">Apply</button>
+      </form>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="shell">
+      <p class="count" style="margin-bottom:26px"><%= list.length %> journey<%= list.length === 1 ? '' : 's' %> · luxury from $6,000 pp / 7 days · groups $2,000–$4,000 pp (10–30 travellers)</p>
+      <% if (!list.length) { %>
+        <div class="callout"><h3>No journeys match that yet.</h3><p>Try clearing the filters, or tell us what you had in mind and we will design it — that is most of what we do.</p><a class="btn" href="/book">Request a proposal</a></div>
+      <% } else { %>
+        <div class="grid grid-3">
+          <% list.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section--tight section--ink">
+    <div class="shell flex between">
+      <div><h3 style="color:#fff;margin:0 0 6px">Nothing here is quite it?</h3><p class="small mb-0">Bespoke starts with a blank page, a phone call and a researcher who makes phone calls in three languages.</p></div>
+      <a class="btn btn--light" href="/tours/bespoke">Bespoke tours</a>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

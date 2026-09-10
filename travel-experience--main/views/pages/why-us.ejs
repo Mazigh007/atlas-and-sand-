@@ -1,0 +1,77 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/tour-luxury.jpg',
+    kicker: 'Why us',
+    title: 'Nineteen years of<br>doing this properly',
+    lede: 'Award-winning planning, no fees for design, guides on salary, and a deposit that holds real inventory rather than a queue-jump.',
+    crumbs: [{ label: 'Why us' }],
+    actions: [{ href: '/book', label: 'Plan my trip' }, { href: '/journeys', label: 'Browse journeys' }]
+  } }) %>
+
+  <section class="section--tight" style="padding-block:0">
+    <div class="shell"><div class="badges">
+      <% badges.forEach(function(b){ %><div class="badge"><h4><%= b.title %></h4><p><%= b.text %></p></div><% }) %>
+    </div></div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">The difference, concretely</p><h2>What a booking with us actually looks like</h2></div><p>Compare this with any other quote you receive. The line items should look similar — and where they do not, ask why.</p></div>
+      <table class="data">
+        <thead><tr><th></th><th>Moroccan Experience</th><th>A typical packaged tour</th><th>Booking it yourself</th></tr></thead>
+        <tbody>
+          <tr><td><b>Itinerary</b></td><td>Designed for you, unlimited revisions, no fee</td><td>Fixed, with optional extras at the door</td><td>Your own, at 1 a.m., from twelve blogs</td></tr>
+          <tr><td><b>Guide</b></td><td>One licensed guide for the whole journey, salaried</td><td>Rotating local reps, handover per city</td><td>Day guides, negotiated per monument</td></tr>
+          <tr><td><b>Rooms</b></td><td>Held with refundable deposits before you pay</td><td>“Or similar” category</td><td>Whatever was free when you clicked</td></tr>
+          <tr><td><b>Money</b></td><td><%= config.deposit.percent %>% deposit, balance <%= config.deposit.balanceDueDaysBefore %> days out, 0% card fee</td><td>Full price at booking, often non-refundable</td><td>Card details to eleven different websites</td></tr>
+          <tr><td><b>When it goes wrong</b></td><td>One phone number, answered in under 30 minutes, any hour</td><td>A resort rep with a clipboard</td><td>Your problem, in a language you do not share</td></tr>
+          <tr><td><b>Where the money goes</b></td><td><%= config.currencySymbol %> to Moroccan staff, family riads and cooperatives</td><td>Partly to an overseas head office</td><td>Wherever you happened to book</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell split">
+      <div>
+        <p class="eyebrow">The deposit, in plain English</p>
+        <h2>Why 25%, and why it is not a racket</h2>
+        <div class="prose">
+          <p>A quarter of the trip cost is what it takes for us to place real money with real people on your behalf: riads want 25–30% to take rooms off their books, guides want a season’s retainer, and a desert camp will not move its inventory for a maybe.</p>
+          <p>We do not add a handling fee to card payments, we do not mark up flights we book for you, and if the deposit covers something we can recover from a supplier — a room released nine months out — we credit it back to you. It is non-refundable for one reason only: at that point we have already spent it for you.</p>
+          <p>Balance falls due <%= config.deposit.balanceDueDaysBefore %> days before departure, which is when our own supplier deadlines fall. That is not a coincidence, and it should be the standard you expect from anybody selling travel.</p>
+        </div>
+        <p class="flex"><a class="btn" href="/booking-conditions">Read the booking conditions</a><a class="link-arrow" href="/faq">Common questions</a></p>
+      </div>
+      <div class="img-frame img-frame--43 reveal"><img src="/img/journey-culinary.jpg" alt="Cooking with a family kitchen in Fes" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell--mid">
+      <p class="eyebrow" style="justify-content:center">In their words</p>
+      <div class="carousel" data-carousel>
+        <div class="carousel-track">
+          <% reviews.forEach(function(r){ %><div class="carousel-slide"><div class="quote-card"><div class="stars">★★★★★</div><blockquote>“<%= r.quote %>”</blockquote><cite><%= r.name %> · <%= r.from %></cite></div></div><% }) %>
+        </div>
+        <div class="carousel-dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--ink">
+    <div class="shell flex between">
+      <div><h3 style="color:#fff;margin:0 0 6px">Start with a conversation</h3><p class="small mb-0">No form-letters, no drip campaign. One designer, one document, usually within 48 hours.</p></div>
+      <div class="flex"><a class="btn btn--light" href="/book">Plan my trip</a><a class="btn btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>">WhatsApp <%= config.contact.phoneMa %></a></div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

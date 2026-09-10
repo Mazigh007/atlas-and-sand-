@@ -1,0 +1,106 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/story-guides.jpg',
+    kicker: 'About us',
+    title: 'Marrakech-based,<br>since ' + config.brand.foundedYear,
+    lede: 'We are ' + (config.brand.legalName) + ': nineteen travel designers, forty-one salaried guides and drivers, and a rule that nobody on our team ever hands your trip to someone else.',
+    crumbs: [{ label: 'About' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell split">
+      <div>
+        <p class="eyebrow">Our story</p>
+        <h2>We started because the tours on offer were wrong</h2>
+        <div class="prose">
+          <p>In <%= config.brand.foundedYear %> two friends — one Moroccan, one English — began driving people around the country on the days they were not working other jobs. The brief was always the same: show us the Morocco that is not in the guidebook, and do not make us sit with strangers. What began as a favour turned into an agency, then a licence, then a team that has grown deliberately slowly.</p>
+          <p>Twenty years on we still design every journey by hand, one at a time, and still refuse to sell a fixed package. It is a slower way to make a living. It is also why the same families book their third and fourth trip with a designer they already know.</p>
+          <p>We keep our guides and drivers on salary through the off-season. It is the single most expensive decision we make and the one everything else depends on: people who are not hungry will tell you the truth about a road, a hotel, or a rug.</p>
+        </div>
+      </div>
+      <div class="img-frame img-frame--34 reveal"><img src="/img/journey-atlas-riad.jpg" alt="A riad terrace in the Atlas foothills" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+    </div>
+  </section>
+
+  <section class="section--tight" style="padding-block:0">
+    <div class="shell">
+      <div class="badges" style="grid-template-columns:repeat(4,1fr)">
+        <div class="badge"><h4>19</h4><p>Travel designers, all based here or in Los Angeles</p></div>
+        <div class="badge"><h4>41</h4><p>Salaried guides, drivers and camp staff</p></div>
+        <div class="badge"><h4>60%</h4><p>Of our beds are family-run riads and lodges</p></div>
+        <div class="badge"><h4>24/7</h4><p>A duty line answered by a designer, not a call centre</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <p class="eyebrow">The team you will actually email</p>
+      <h2>Named people, reachable hours</h2>
+      <div class="grid grid-4" style="margin-top:12px">
+        <% [
+          { n: 'Yasmine El Amrani', r: 'Co-founder & head of design', b: 'Twenty-one years building itineraries in the Rif and the deep south. Speaks Darija, French, Spanish, English.' },
+          { n: 'Alistair Fane', r: 'Co-founder & luxury specialist', b: 'Runs the palace properties, the camps and the aircraft. If a dune has a better ridge, he has walked it.' },
+          { n: 'Amal Bouzid', r: 'Group travel lead', b: 'Women-only, student and senior departures. Writes the safeguarding pack herself and knows every riad with a lift.' },
+          { n: 'Hicham Ouali', r: 'Bespoke & access', b: 'Fixers, permits, cooperatives, private collections and the family kitchens that are not for sale to anyone else.' }
+        ].forEach(function(t){ %>
+          <div class="card reveal">
+            <div class="monogram" aria-hidden="true"><%= t.n.split(' ').map(w=>w[0]).join('') %></div>
+            <div class="card-body">
+              <h3 style="font-size:23px"><%= t.n %></h3>
+              <span class="eyebrow eyebrow--plain" style="margin:0 0 8px"><%= t.r %></span>
+              <p><%= t.b %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      <p class="small muted" style="margin-top:18px">Every designer answers their own e-mail. Ask for your preferred region and we will match you: Marrakech and the south, Fes and the north, or the Rif and the coast.</p>
+    </div>
+  </section>
+
+  <section class="section section--ink">
+    <div class="shell">
+      <div class="grid grid-2">
+        <div>
+          <p class="eyebrow">How we work</p>
+          <h2 style="color:#fff">Four things we will not do</h2>
+          <ul class="check-list" style="margin-top:18px">
+            <li>Sell a template. If you find two travellers with the same itinerary, it is because they asked for the same thing.</li>
+            <li>Charge planning fees. Design time is inside the trip price and the proposal is free whether or not you book.</li>
+            <li>Take you to a shop that pays us commission without telling you. If we bring you somewhere, we get nothing from it.</li>
+            <li>Photograph people for marketing without asking. Ever, anywhere, including children at a school we visit.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="eyebrow">Money and paperwork</p>
+          <ul class="check-list" style="margin-top:18px">
+            <li>A <%= config.deposit.percent %>% deposit by card through Stripe, or by transfer, secures your trip.</li>
+            <li>The balance falls due <%= config.deposit.balanceDueDaysBefore %> days before departure — never earlier, unless you book late.</li>
+            <li>Every invoice lists the actual supplier rate, so you can see what we are not marking up.</li>
+            <li>Licensed by the Moroccan Ministry of Tourism; professional indemnity and fidelity cover in force.</li>
+            <li>Full terms live in the <a href="/booking-conditions" style="text-decoration:underline">booking conditions</a> and <a href="/legal-terms" style="text-decoration:underline">legal terms</a>.</li>
+          </ul>
+          <p class="flex" style="margin-top:22px"><a class="btn btn--light" href="/why-us">Why travellers choose us</a><a class="btn btn--light" href="/contact">Contact the team</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">Press</p><h2>What has been said</h2></div></div>
+      <div class="press-strip">
+        <% press.forEach(function(x){ %><div class="press-quote reveal"><p>“<%= x.quote %>”</p><span><%= x.source %></span></div><% }) %>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

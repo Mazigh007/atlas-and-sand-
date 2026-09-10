@@ -1,0 +1,30 @@
+<%
+  const h = typeof hero !== 'undefined' ? hero : {};
+  const crumb = h.crumbs || [];
+%>
+<section class="page-hero">
+  <div class="hero-media">
+    <img src="<%= h.image || '/img/hero-riad.jpg' %>" alt="<%= h.alt || (h.kicker || '') + ' ' + h.title %>" fetchpriority="high" onerror="this.classList.add('is-missing')">
+  </div>
+  <div class="shell hero-inner">
+    <% if (crumb.length) { %>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><% crumb.forEach(function(c,i){ %> / <% if (c.href) { %><a href="<%= c.href %>"><%= c.label %></a><% } else { %><%= c.label %><% } %><% }) %>
+      </nav>
+    <% } else { %>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <%= h.kicker || '' %></nav>
+    <% } %>
+    <h1 class="display"><%= h.title %></h1>
+    <% if (h.lede) { %><p class="lede"><%= h.lede %></p><% } %>
+    <% if (h.actions) { %>
+      <div class="hero-actions">
+        <% h.actions.forEach(function(a,i){ %><a class="btn <%= i===0 ? '' : 'btn--light' %>" href="<%= a.href %>"><%= a.label %></a><% }) %>
+      </div>
+    <% } %>
+    <% if (h.stats) { %>
+      <div class="hero-foot">
+        <% h.stats.forEach(function(s){ %><span><b style="font-family:var(--display);font-size:17px"><%= s.v %></b> &nbsp;<%= s.l %></span><% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

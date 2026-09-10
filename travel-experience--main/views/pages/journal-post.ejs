@@ -1,0 +1,48 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <article>
+    <section class="page-hero" style="min-height:52vh">
+      <div class="hero-media"><img src="<%= p.image %>" alt="<%= p.title %>" fetchpriority="high" onerror="this.classList.add('is-missing')"></div>
+      <div class="shell hero-inner">
+        <nav class="crumbs"><a href="/">Home</a> / <a href="/journal">Journal</a> / <%= p.category %></nav>
+        <p class="eyebrow" style="color:rgba(255,255,255,.7)"><%= p.category %> · <%= new Date(p.date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) %> · <%= p.read %> read</p>
+        <h1 class="display" style="max-width:22ch"><%= p.title %></h1>
+      </div>
+    </section>
+
+    <div class="shell--narrow section" style="padding-block:clamp(48px,6vw,86px)">
+      <p class="lede" style="font-size:clamp(20px,1.9vw,26px);color:var(--ink);max-width:66ch"><%= p.lede %></p>
+      <div class="prose" style="margin-top:34px">
+        <% p.body.forEach(function(b){ %><h2><%= b.h %></h2><p><%= b.p %></p><% }) %>
+      </div>
+
+      <hr class="rule" style="margin-block:48px">
+      <div class="flex between">
+        <div><h4 class="mb-0">Talk it through with a designer</h4><p class="small muted mb-0"><%= config.contact.phoneMa %> Morocco · <%= config.contact.phoneUsa %> USA · <%= config.contact.emailBookings %></p></div>
+        <a class="btn" href="/book">Plan my trip</a>
+      </div>
+    </div>
+
+    <% if (posts.length) { %>
+      <section class="section section--paper">
+        <div class="shell">
+          <div class="section-head"><div><p class="eyebrow">Keep reading</p><h2>Elsewhere in the journal</h2></div><a class="link-arrow" href="/journal">All articles</a></div>
+          <div class="grid grid-3">
+            <% posts.forEach(function(x){ %>
+              <a class="card" href="/journal/<%= x.slug %>" style="background:var(--white)">
+                <div class="card-media" style="aspect-ratio:16/10"><img src="<%= x.image %>" alt="<%= x.title %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+                <div class="card-body"><span class="eyebrow eyebrow--plain" style="margin:0"><%= x.category %></span><h3 style="font-size:24px"><%= x.title %></h3><span class="link-arrow">Read</span></div>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    <% } %>
+  </article>
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

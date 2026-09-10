@@ -1,0 +1,71 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: d.image,
+    kicker: d.region,
+    title: d.name,
+    lede: d.tagline,
+    crumbs: [{ label: 'Destinations', href: '/destinations' }, { label: d.name }],
+    actions: [{ href: '/journeys', label: 'Journeys that include it' }, { href: '/book', label: 'Plan a trip' }],
+    stats: [{ v: d.best, l: 'best time to go' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell layout-detail">
+      <div>
+        <p class="eyebrow">The place</p>
+        <h2>What <%= d.name %> is for</h2>
+        <div class="prose"><p><%= d.blurb %></p></div>
+        <h3 style="margin-top:38px">Do not miss</h3>
+        <ul class="check-list"><% d.highlights.forEach(function(h){ %><li><%= h %></li><% }) %></ul>
+        <h3>Where we put you</h3>
+        <ul class="check-list"><% d.stays.forEach(function(s){ %><li><%= s %></li><% }) %></ul>
+      </div>
+      <aside>
+        <div class="summary">
+          <h3><%= d.name %> itineraries</h3>
+          <p class="sum-journey">Journeys on sale that include this region, with per-person prices.</p>
+          <ul class="sum-lines">
+            <% list.forEach(function(j){ %>
+              <li><span><a href="/journeys/<%= j.slug %>"><%= j.name %></a><br><span class="small muted"><%= j.tourType.name %> · <%= j.nights %> nights</span></span><span>$<%= j.priceFrom.toLocaleString('en-US') %></span></li>
+            <% }) %>
+            <% if (!list.length) { %><li><span>No published itinerary matches — we will design one.</span><span>—</span></li><% } %>
+          </ul>
+          <div class="sum-deposit"><div><span>Deposit</span><b><%= config.deposit.percent %>%</b></div><a class="btn btn--light" href="/book">Start</a></div>
+        </div>
+        <div class="img-frame img-frame--34" style="margin-top:20px"><img src="<%= d.image %>" alt="<%= d.name %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+      </aside>
+    </div>
+  </section>
+
+  <% if (list.length) { %>
+    <section class="section section--paper">
+      <div class="shell">
+        <div class="section-head"><div><p class="eyebrow">Worth the flight</p><h2>Journeys through <%= d.name %></h2></div></div>
+        <div class="grid grid-3"><% list.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %></div>
+      </div>
+    </section>
+  <% } %>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">Keep going</p><h2>Other Moroccos</h2></div><a class="link-arrow" href="/destinations">All destinations</a></div>
+      <div class="grid grid-4">
+        <% otherDestinations.forEach(function(o){ %>
+          <a class="tile reveal" href="/destinations/<%= o.slug %>">
+            <img src="<%= o.image %>" alt="<%= o.name %>" loading="lazy" onerror="this.classList.add('is-missing')">
+            <div class="tile-body"><h3><%= o.name %></h3><p><%= o.best %></p></div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

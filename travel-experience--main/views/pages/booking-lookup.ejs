@@ -1,0 +1,30 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-block:clamp(56px,7vw,104px)">
+    <div class="shell--narrow">
+      <p class="eyebrow">Find my booking</p>
+      <h1 class="display" style="font-size:clamp(34px,4.6vw,58px);margin-bottom:14px">Status, in one box</h1>
+      <p class="lede">Your reference looks like <b>ME-2026-00042</b> and is in the subject line of every e-mail we have sent you. Add the e-mail on the booking to confirm it is yours.</p>
+
+      <% if (error) { %><p class="notice notice--err" style="margin-top:22px"><%= error %></p><% } %>
+
+      <form method="post" action="/booking/lookup" class="field-grid" style="margin-top:26px">
+        <label class="field"><span>Booking reference</span><input type="text" name="ref" placeholder="ME-2026-00042" required style="text-transform:uppercase"></label>
+        <label class="field"><span>Email on the booking</span><input type="email" name="email" placeholder="you@example.com" autocomplete="email"></label>
+        <div class="full"><button class="btn" type="submit">Find it</button></div>
+      </form>
+
+      <hr class="rule" style="margin-block:44px">
+      <div class="grid grid-2">
+        <div class="callout"><h4>Lost the reference?</h4><p class="small mb-0">WhatsApp <a href="https://wa.me/<%= config.contact.whatsapp %>" style="text-decoration:underline"><%= config.contact.phoneMa %></a> with your name and travel month — we will find it in a minute. Or ask the assistant in the corner and it will hand the question to a person.</p></div>
+        <div class="callout"><h4>Payments &amp; invoices</h4><p class="small mb-0">Deposits taken by Stripe; balance invoices are e-mailed <%= config.deposit.balanceDueDaysBefore %> days before departure and can be paid by card or transfer, or split across two cards.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>

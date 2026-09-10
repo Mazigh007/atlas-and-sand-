@@ -1,0 +1,25 @@
+<%
+  const item = (typeof j !== 'undefined' && j) ? j : locals.journey;
+  const priceLabel = item.category === 'group'
+    ? `From $${item.priceFrom.toLocaleString('en-US')} <span>per person · $${(item.priceMax||item.priceFrom).toLocaleString('en-US')} at 10 travellers</span>`
+    : `From $${item.priceFrom.toLocaleString('en-US')} <span>per person · ${item.nights} nights</span>`;
+%>
+<article class="card reveal">
+  <a class="card-media" href="/journeys/<%= item.slug %>" aria-label="<%= item.name %>">
+    <img src="<%= item.image %>" alt="<%= item.name %> — <%= item.tourType.name %> in Morocco" loading="lazy" onerror="this.classList.add('is-missing')">
+    <div class="card-tag">
+      <span class="tag tag--light"><%= item.tourType.name.replace(' tours','').replace(' Tours','') %></span>
+      <% if (item.audience) { %><span class="tag tag--clay"><%= item.audience %></span><% } %>
+      <% if (item.featured) { %><span class="tag">Signature</span><% } %>
+    </div>
+  </a>
+  <div class="card-body">
+    <span class="eyebrow eyebrow--plain" style="margin:0"><%= item.nights %> nights · <%= item.season.split('·')[0].trim() %></span>
+    <h3><a href="/journeys/<%= item.slug %>"><%= item.name %></a></h3>
+    <p><%= item.summary.length > 168 ? item.summary.slice(0,168).replace(/\s+\S*$/,'') + '…' : item.summary %></p>
+    <div class="card-meta">
+      <span class="price"><%= `$${item.priceFrom.toLocaleString('en-US')}` %> <span>per person<%= item.category==='luxury' ? ` · ${item.nights} days` : '' %></span></span>
+      <a class="link-arrow" href="/book?journey=<%= item.slug %>">Book</a>
+    </div>
+  </div>
+</article>

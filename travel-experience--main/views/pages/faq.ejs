@@ -1,0 +1,43 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/journey-fes-zellige.jpg',
+    kicker: 'Booking FAQ',
+    title: 'The questions<br>we are asked daily',
+    lede: 'Deposits, balances, cancellation charges, group sizes, visas, insurance, and what the word “luxury” is worth here.',
+    crumbs: [{ label: 'FAQ' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell--mid">
+      <div class="acc">
+        <% faq.forEach(function(f, i){ %>
+          <details<%= i === 0 ? ' open' : '' %>>
+            <summary><%= f.q %></summary>
+            <div class="acc-body"><p><%= f.a %></p></div>
+          </details>
+        <% }) %>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:56px">
+        <div class="callout"><h4>Money &amp; terms</h4><p class="small mb-0">Deposit, balance, amendments, cancellation and what happens if we change something. The legal version, in English.</p><a class="link-arrow" href="/booking-conditions">Booking conditions</a></div>
+        <div class="callout"><h4>Your data</h4><p class="small mb-0">What we collect, why, Stripe’s role, cookies, retention and how to make a request under GDPR or Law 09-08.</p><a class="link-arrow" href="/privacy-policy">Privacy policy</a></div>
+        <div class="callout"><h4>Still stuck?</h4><p class="small mb-0">The assistant in the corner answers on prices and policy at any hour, and hands you to a human when it should.</p><a class="link-arrow" href="/contact">Contact</a></div>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    <% faq.forEach(function(f,i){ %>{"@type":"Question","name":<%= JSON.stringify(f.q) %>,"acceptedAnswer":{"@type":"Answer","text":<%= JSON.stringify(f.a) %>}}<%= i < faq.length-1 ? ',' : '' %><% }) %>
+  ]}
+  </script>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js" defer></script>
+</body>
+</html>
