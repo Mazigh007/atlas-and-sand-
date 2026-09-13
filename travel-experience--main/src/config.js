@@ -172,4 +172,10 @@ const config = {
 
 config.siteUrl = (process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 3000)).replace(/\/$/, '');
 
+// Bumped once per process start, so every deploy gets a fresh query string on
+// /css/styles.css and /js/site.js — this busts the 7/30-day browser cache set
+// by express.static below, so CSS/JS fixes show up immediately after deploy
+// instead of waiting out the cache lifetime.
+config.assetVersion = Date.now();
+
 module.exports = config;

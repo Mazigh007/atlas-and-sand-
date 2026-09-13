@@ -68,7 +68,7 @@ async function createCheckoutSession(booking, baseUrl) {
     line_items: [depositLine(booking)],
     metadata: meta,
     payment_intent_data: { metadata: meta, description: `${booking.ref} deposit` },
-    expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 60, // 60h
+    expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 23, // 23h (Stripe's hard cap is 24h)
     success_url: `${baseUrl}/booking/confirmation?ref=${booking.ref}&session_id={CHECKOUT_SESSION_ID}&status=paid`,
     cancel_url: `${baseUrl}/booking/cancelled?ref=${booking.ref}`,
   });
