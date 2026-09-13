@@ -189,10 +189,11 @@ p { margin: 0 0 1.1em; }
   border-bottom: 1px solid transparent;
 }
 .site-header.is-solid { background: rgba(247, 242, 234, 0.94); backdrop-filter: blur(14px); border-color: var(--ink-12); }
-.site-header.on-hero:not(.is-solid) { color: #fff; }
-.site-header.on-hero:not(.is-solid) .nav a { color: rgba(255, 255, 255, 0.9); }
-.site-header.on-hero:not(.is-solid) .logo-mark { color: #fff; }
-.site-header.on-hero:not(.is-solid) .btn--ink { background: #fff; color: var(--ink); border-color: #fff; }
+/* Note: the header sits in normal document flow (position: sticky), so it never actually
+   overlaps a hero photo behind it — it always renders on the plain page background.
+   White header text was previously toggled based only on "does this page have a hero
+   image anywhere," which made the logo, nav links, and menu icon invisible against the
+   light background. Removed so the header always uses the readable default ink color. */
 .nav-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 0; }
 .brand { display: flex; align-items: center; gap: 11px; }
 .brand-mark { width: 34px; height: 34px; flex: 0 0 auto; }
@@ -323,7 +324,9 @@ body.nav-open .mobile-nav { transform: none; }
 
 /* page hero (interior pages) */
 .page-hero { position: relative; color: #fff; min-height: 58vh; display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; }
-.page-hero .hero-media::after { background: linear-gradient(180deg, rgba(12, 9, 7, 0.55), rgba(12, 9, 7, 0.2) 45%, rgba(12, 9, 7, 0.8)); }
+.page-hero .hero-media::after { background: linear-gradient(180deg, rgba(12, 9, 7, 0.6), rgba(12, 9, 7, 0.38) 45%, rgba(12, 9, 7, 0.82)); }
+.page-hero h1 { text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4); }
+.page-hero .lede { color: rgba(255, 255, 255, 0.92); text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
 .crumbs { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); margin-bottom: 18px; }
 .crumbs a:hover { color: #fff; }
 

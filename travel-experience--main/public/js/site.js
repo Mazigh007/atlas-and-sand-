@@ -8,14 +8,12 @@
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
 
-  /* ── header: solid after scroll, white while over a dark hero ─────────── */
+  /* ── header: solid background after scrolling past the top ────────────── */
   const header = $('#siteHeader');
-  const hasDarkHero = Boolean($('.hero, .page-hero'));
   function onScroll() {
     if (!header) return;
     const y = window.scrollY || 0;
     header.classList.toggle('is-solid', y > 40);
-    if (hasDarkHero) header.classList.toggle('on-hero', y < 140);
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
