@@ -285,6 +285,11 @@ body.nav-open .mobile-nav { transform: none; }
 .mobile-nav .mn-sub { font-family: var(--body); font-size: 13.5px; padding: 6px 0 14px; color: var(--ink-50); border: 0; display: block; }
 .mobile-nav .mn-label { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-50); margin: 26px 0 4px; }
 .mobile-nav .btn { margin-top: 22px; }
+/* While the mobile menu is open, hide the floating chat/back-to-top/cookie
+   UI — they sit at a higher z-index than the menu and would otherwise
+   remain tappable on top of it, colliding with nav links and the CTA
+   button near the bottom of the drawer. */
+body.nav-open .chat-launcher, body.nav-open .to-top, body.nav-open .chat-panel, body.nav-open .cookie { display: none !important; }
 
 /* ── hero ───────────────────────────────────────────────────────────────── */
 .hero { position: relative; min-height: min(94vh, 940px); display: flex; align-items: flex-end; color: #fff; overflow: hidden; isolation: isolate; }

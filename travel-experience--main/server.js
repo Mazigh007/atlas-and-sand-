@@ -116,8 +116,6 @@ if (require.main === module) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  ${config.brand.name} — ${config.brand.baseline}`);
     console.log(`  http://localhost:${PORT}`);
-    console.log(`  [DEBUG] process.env.BASE_URL = ${JSON.stringify(process.env.BASE_URL)}`);
-    console.log(`  [DEBUG] config.siteUrl = ${JSON.stringify(config.siteUrl)}`);
     console.log(`  Payments: ${stripeService.describe().mode === 'demo' ? 'DEMO (add STRIPE_SECRET_KEY to .env for real Stripe Checkout)' : 'Stripe ' + stripeService.describe().mode}`);
     console.log(`  Assistant: ${require('./src/services/chatAgent').providerReady() ? 'LLM connected' : 'offline expert (set ANTHROPIC_API_KEY or OPENAI_API_KEY for the live model)'}\n`);
   });

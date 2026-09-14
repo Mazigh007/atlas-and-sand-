@@ -14,7 +14,7 @@
     <div class="shell--narrow section" style="padding-block:clamp(48px,6vw,86px)">
       <p class="lede" style="font-size:clamp(20px,1.9vw,26px);color:var(--ink);max-width:66ch"><%= p.lede %></p>
       <div class="prose" style="margin-top:34px">
-        <% p.body.forEach(function(b){ %><h2><%= b.h %></h2><p><%= b.p %></p><% }) %>
+        <% p.body.forEach(function(b){ %><h2><%= b.h %></h2><p><%- b.p %></p><% }) %>
       </div>
 
       <hr class="rule" style="margin-block:48px">

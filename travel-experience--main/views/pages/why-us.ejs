@@ -2,10 +2,12 @@
 <%- include('../partials/header') %>
 <main id="main" tabindex="-1">
 
+  <% const yearsRunning = new Date().getFullYear() - config.brand.foundedYear; %>
   <%- include('../partials/page-hero', { hero: {
     image: '/img/tour-luxury.jpg',
     kicker: 'Why us',
-    title: 'Nineteen years of<br>doing this properly',
+    title: yearsRunning + ' years of<br>doing this properly',
+    alt: yearsRunning + ' years of doing this properly',
     lede: 'Award-winning planning, no fees for design, guides on salary, and a deposit that holds real inventory rather than a queue-jump.',
     crumbs: [{ label: 'Why us' }],
     actions: [{ href: '/book', label: 'Plan my trip' }, { href: '/journeys', label: 'Browse journeys' }]

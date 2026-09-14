@@ -14,9 +14,9 @@ const config = {
     short: 'Moroccan Experience',
     legalName: 'Moroccan Experience voyages SARL',
     baseline: 'The Morocco travel experts',
-    tagline: 'Tailor-made journeys across Morocco. Est. 2005.',
+    tagline: 'Tailor-made journeys across Morocco. Est. 2010.',
     claim: 'Every journey starts with a feeling',
-    foundedYear: 2005,
+    foundedYear: 2010,
     licences: ['Moroccan Ministry of Tourism — Licence d’Agence de Voyages n° 270/02', 'IATA accredited agent · 78 3 2315 4'],
     address: {
       line1: '47 Derb Sidi Bouloucate, Riad Zone',

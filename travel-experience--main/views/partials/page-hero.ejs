@@ -14,7 +14,7 @@
     <% } else { %>
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <%= h.kicker || '' %></nav>
     <% } %>
-    <h1 class="display"><%= h.title %></h1>
+    <h1 class="display"><%- h.title %></h1>
     <% if (h.lede) { %><p class="lede"><%= h.lede %></p><% } %>
     <% if (h.actions) { %>
       <div class="hero-actions">

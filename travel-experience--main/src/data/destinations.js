@@ -67,6 +67,19 @@ const destinations = [
     journeys: ['atlantic-coast-essaouira-escape', 'senior-slow-travel-morocco'],
   },
   {
+    slug: 'agadir-souss-massa',
+    name: 'Agadir, the Souss-Massa Coast & Taliouine',
+    region: 'South west',
+    tagline: 'Wild coastline, one of the world\'s rarest birds, and a saffron harvest that will not wait for you',
+    image: '/img/destination-agadir-souss-massa.jpg',
+    best: 'Sept – Apr for birdlife · late Oct – Nov for the saffron harvest',
+    blurb:
+      'South of Agadir, the Souss-Massa wetlands hold most of the world\'s wild northern bald ibis alongside herons, waders and migrating flocks. Two hours inland, Taliouine grows most of Morocco\'s saffron, picked by hand for two short weeks each autumn. Taroudant, the quieter walled town between the two, makes a good base for either.',
+    highlights: ['Northern bald ibis colonies at Souss-Massa National Park', 'The saffron harvest at dawn in Taliouine (late Oct – Nov)', 'Taroudant\'s ramparts and souks, without Marrakech\'s crowds', 'Argan cooperatives on the road toward Essaouira'],
+    stays: ['Boutique hotels along the Agadir coastline', 'Riads within Taroudant\'s ramparts', 'Guesthouses in the Anti-Atlas foothills near Taliouine'],
+    journeys: ['bespoke-desert-photography', 'atlantic-coast-essaouira-escape'],
+  },
+  {
     slug: 'high-atlas',
     name: 'High Atlas & the Berber Villages',
     region: 'Central',
