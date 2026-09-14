@@ -1,0 +1,240 @@
+<%
+  const errFor = (f) => (errors || []).find((e) => e.field === f);
+  const v = (k, d) => {
+    const fromValues = values && values.contact ? values.contact[k] : undefined;
+    if (fromValues !== undefined && fromValues !== null) return fromValues;
+    return d === undefined ? '' : d;
+  };
+  const consent = (values && values.consent) || {};
+  const checked = (name, on) => (consent[name] === undefined ? on : consent[name] ? 'checked' : '');
+  const journeyField = values && values.journeySlug !== undefined ? values.journeySlug : form.journey;
+%>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <section class="section--tight" style="padding-block:clamp(30px,4vw,52px);border-bottom:1px solid var(--ink-12);background:var(--paper-2)">
+    <div class="shell flex between">
+      <div>
+        <p class="eyebrow" style="margin-bottom:6px">Booking · <%= config.brand.name %></p>
+        <h1 class="display" style="font-size:clamp(30px,3.6vw,50px);margin:0">Plan my trip &amp; pay the <%= config.deposit.percent %>% deposit</h1>
+      </div>
+      <div class="flex" style="gap:10px">
+        <span class="tag tag--outline"><%= stripe.mode === 'demo' ? 'Demo payments · add STRIPE_SECRET_KEY' : 'Stripe secure checkout' %></span>
+        <a class="btn btn--sm btn--ghost" href="/booking/lookup">Find my booking</a>
+      </div>
+    </div>
+  </section>
+
+  <% if (errors && errors.length) { %>
+    <div class="shell" style="padding-top:22px">
+      <div class="notice notice--err"><b>Almost there — <%= errors.length %> thing<%= errors.length>1?'s':'' %> to fix.</b> <%= errors.map(e=>e.msg).join(' ') %></div>
+    </div>
+  <% } %>
+
+  <section class="section">
+    <form method="post" action="/book" id="bookingForm" data-quote-url="/api/quote" novalidate>
+      <input type="hidden" name="company_website" value="" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="shell layout-detail">
+
+        <!-- ══ left: the form ══ -->
+        <div>
+          <fieldset>
+            <legend>01 · The journey</legend>
+            <div class="field-grid">
+              <label class="field full <%= errFor('journey') ? 'has-error' : '' %>">
+                <span>Journey</span>
+                <select name="journey" id="fJourney">
+                  <option value="">— Design something bespoke (no itinerary selected) —</option>
+                  <% Object.values(CATEGORIES).forEach(function(cat){ const items = journeyOptions.filter(o => o.category === cat.slug); if (!items.length) return; %>
+                    <optgroup label="<%= cat.name %>">
+                      <% items.forEach(function(o){ %>
+                        <option value="<%= o.slug %>" data-category="<%= o.category %>" data-nights="<%= o.nights %>" data-audience="<%= o.audience || '' %>" <%= journeyField === o.slug ? 'selected' : '' %>>
+                          <%= o.name %> · <%= o.nights %> nights · from $<%= o.priceFrom.toLocaleString('en-US') %> pp<%= o.priceMax ? ' (groups to $' + o.priceMax.toLocaleString('en-US') + ')' : '' %>
+                        </option>
+                      <% }) %>
+                    </optgroup>
+                  <% }) %>
+                </select>
+                <% if (errFor('journey')) { %><span class="err"><%= errFor('journey').msg %></span><% } else { %><span class="hint">Anything on this list can be shortened, lengthened or rebuilt. If nothing fits, leave it blank and tell us below.</span><% } %>
+              </label>
+
+              <input type="hidden" name="audience" id="fAudience" value="">
+              <div class="field">
+                <span>Journey type</span>
+                <select name="category" id="fCategory">
+                  <% Object.values(CATEGORIES).forEach(function(c){ %>
+                    <option value="<%= c.slug %>" <%= (form.category || 'private') === c.slug ? 'selected' : '' %>><%= c.name %></option>
+                  <% }) %>
+                </select>
+                <span class="hint"><span data-cat-note>Group = 10 – 30 travellers on a fixed date. Private, luxury and bespoke run on your dates.</span></span>
+              </div>
+
+              <label class="field <%= errFor('travellers') ? 'has-error' : '' %>">
+                <span>Travellers</span>
+                <div class="stepper" data-stepper data-min="1" data-max="300">
+                  <button type="button" data-step="-1" aria-label="One fewer traveller">−</button>
+                  <input type="number" name="travellers" id="fTravellers" value="<%= form.travellers %>" min="1" max="300" inputmode="numeric">
+                  <button type="button" data-step="1" aria-label="One more traveller">+</button>
+                </div>
+                <% if (errFor('travellers')) { %><span class="err"><%= errFor('travellers').msg %></span><% } else { %><span class="hint">Group departures need 10 – 30 travellers. Private journeys take 1 – 12.</span><% } %>
+              </label>
+
+              <label class="field">
+                <span>Nights</span>
+                <div class="stepper" data-stepper data-min="2" data-max="21">
+                  <button type="button" data-step="-1" aria-label="One night fewer">−</button>
+                  <input type="number" name="nights" id="fNights" value="<%= form.nights %>" min="2" max="21" inputmode="numeric">
+                  <button type="button" data-step="1" aria-label="One night more">+</button>
+                </div>
+                <span class="hint">7 nights is the benchmark we price luxury against.</span>
+              </label>
+
+              <label class="field <%= errFor('startDate') ? 'has-error' : '' %>" style="grid-column:span 1">
+                <span>Departure date (or best guess)</span>
+                <input type="date" name="startDate" id="fDate" value="<%= form.startDate %>" min="<%= new Date(Date.now()+86400000*3).toISOString().slice(0,10) %>">
+                <% if (errFor('startDate')) { %><span class="err"><%= errFor('startDate').msg %></span><% } else { %><span class="hint">Sets the season rate: peak ×1.18 (Jan, Jul, Aug, Dec), shoulder ×1.0, low ×0.9.</span><% } %>
+              </label>
+
+              <div class="field">
+                <span>Rooms</span>
+                <label class="check"><input type="checkbox" name="single" id="fSingle" <%= form.single ? 'checked' : '' %>> Single rooms throughout (adds 18% per person)</label>
+                <span class="hint">Leave unticked to share a twin — the quoted price assumes sharing.</span>
+              </div>
+            </div>
+
+            <div class="field-grid full" style="margin-top:26px">
+              <div class="field full">
+                <span>Add-ons <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">— all optional, priced per person</span></span>
+                <div class="grid grid-2" style="gap:8px 22px;margin-top:6px">
+                  <% Object.entries(extrasCatalogue).forEach(function(pair){ const key = pair[0], ex = pair[1]; %>
+                    <label class="check"><input type="checkbox" name="extras" value="<%= key %>" <%= form.extras.includes(key) ? 'checked' : '' %>> <%= ex.label %> <span class="muted">· +$<%= ex.perPerson %></span></label>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <hr class="rule" style="margin-block:44px">
+
+          <fieldset>
+            <legend>02 · Who we are writing to</legend>
+            <div class="field-grid">
+              <label class="field">
+                <span>Title</span>
+                <select name="title"><% ['Mr','Mrs','Ms','Mx','Dr','Prof.'].forEach(function(t){ %><option <%= v('title')===t?'selected':'' %>><%= t %></option><% }) %></select>
+              </label>
+              <label class="field">
+                <span>Group / school / company <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></span>
+                <input type="text" name="partyLead" value="<%= v('partyLead') %>" placeholder="Rifle Hiking Club, Year 12 cohort…">
+              </label>
+              <label class="field <%= errFor('firstName') ? 'has-error' : '' %>"><span>First name</span><input type="text" name="firstName" value="<%= v('firstName') %>" autocomplete="given-name" required><% if (errFor('firstName')) { %><span class="err"><%= errFor('firstName').msg %></span><% } %></label>
+              <label class="field <%= errFor('lastName') ? 'has-error' : '' %>"><span>Last name</span><input type="text" name="lastName" value="<%= v('lastName') %>" autocomplete="family-name" required><% if (errFor('lastName')) { %><span class="err"><%= errFor('lastName').msg %></span><% } %></label>
+              <label class="field <%= errFor('email') ? 'has-error' : '' %>"><span>Email</span><input type="email" name="email" value="<%= v('email') %>" autocomplete="email" required placeholder="you@example.com"><% if (errFor('email')) { %><span class="err"><%= errFor('email').msg %></span><% } %></label>
+              <label class="field <%= errFor('phone') ? 'has-error' : '' %>"><span>Phone, with country code</span><input type="tel" name="phone" value="<%= v('phone') %>" autocomplete="tel" required placeholder="+44 7700 900000"><% if (errFor('phone')) { %><span class="err"><%= errFor('phone').msg %></span><% } else { %><span class="hint">Used for the trip WhatsApp group and anything urgent.</span><% } %></label>
+              <label class="field"><span>Country of residence</span><input type="text" name="country" value="<%= v('country') %>" autocomplete="country-name" placeholder="United States"></label>
+              <label class="field"><span>Diet, allergies, mobility</span><input type="text" name="diet" value="<%= v('diet') %>" placeholder="Vegetarian, knee cannot do stairs…"></label>
+              <label class="field full"><span>Anything else we should design around</span><textarea name="notes" placeholder="Anniversary, a weaver we want to find, one day with nothing scheduled, travelling with a 9-year-old, a passport that needs an extra page…"><%= v('notes') %></textarea></label>
+            </div>
+          </fieldset>
+
+          <hr class="rule" style="margin-block:44px">
+
+          <fieldset>
+            <legend>03 · Terms &amp; how you want to pay</legend>
+            <div class="field-grid">
+              <div class="field full">
+                <span>Payment</span>
+                <label class="check" style="margin-bottom:9px"><input type="radio" name="payNow" value="yes" checked> Pay the <b><%= config.deposit.percent %>% deposit</b> now by card, through Stripe — this secures rooms and guides</label>
+                <label class="check"><input type="radio" name="payNow" value="no"> Send me a costed proposal first; I will pay nothing until I approve it</label>
+                <span class="hint" style="margin-top:8px">No planning fee either way. Nothing is charged by choosing the second option.</span>
+              </div>
+
+              <label class="check full <%= errFor('acceptConditions') ? 'has-error' : '' %>">
+                <input type="checkbox" name="acceptConditions" value="on" <%= checked('conditions', false) %>>
+                <span>I accept the <a href="/booking-conditions" target="_blank" rel="noopener">booking conditions</a>, including the non-refundable <%= config.deposit.percent %>% deposit, the balance due <%= config.deposit.balanceDueDaysBefore %> days before departure, and the cancellation scale.</span>
+              </label>
+              <% if (errFor('acceptConditions')) { %><span class="err full"><%= errFor('acceptConditions').msg %></span><% } %>
+
+              <label class="check full <%= errFor('acceptPrivacy') ? 'has-error' : '' %>">
+                <input type="checkbox" name="acceptPrivacy" value="on" <%= checked('privacy', false) %>>
+                <span>I have read the <a href="/privacy-policy" target="_blank" rel="noopener">privacy policy</a> and consent to you holding these details to answer my enquiry. <a href="/legal-terms" target="_blank" rel="noopener">Legal terms</a> also apply.</span>
+              </label>
+              <% if (errFor('acceptPrivacy')) { %><span class="err full"><%= errFor('acceptPrivacy').msg %></span><% } %>
+
+              <label class="check full">
+                <input type="checkbox" name="acceptMarketing" value="on" <%= checked('marketing', false) %>>
+                <span>Optional: send me one letter a month about routes, seasons and dates that are working. Unsubscribe in one click.</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ══ right: live price ══ -->
+        <aside>
+          <div class="summary" id="quoteBox">
+            <h3>Your price</h3>
+            <p class="sum-journey" id="quoteJourney"><%= initialQuote.journey ? initialQuote.journey.name : 'Bespoke design' %> · <span id="quoteMeta"><%= initialQuote.travellers %> travellers · <%= initialQuote.nights %> nights</span></p>
+            <ul class="sum-lines" id="quoteLines">
+              <% initialQuote.lines.forEach(function(l){ %><li class="<%= l.kind === 'discount' ? 'disc' : '' %>"><span><%= l.label %></span><span><%= l.amount < 0 ? '−' : '' %>$<%= Math.abs(Math.round(l.amount)).toLocaleString('en-US') %></span></li><% }) %>
+              <% if (initialQuote.mode === 'quote') { %>
+                <li><span>Per person</span><span><b><%= initialQuote.formatted.perPerson %></b></span></li>
+              <% } %>
+            </ul>
+            <% if (initialQuote.mode === 'quote') { %>
+              <div class="sum-total"><span>Trip total</span><span id="qTotal"><%= initialQuote.formatted.tripTotal %></span></div>
+            <% } %>
+            <div class="sum-deposit">
+              <div><span id="qDepositLabel">Pay today · <%= config.deposit.percent %>% deposit</span><b id="qDeposit"><%= initialQuote.mode === 'quote' ? initialQuote.formatted.deposit : 'Nothing' %></b></div>
+            </div>
+            <p class="sum-note" id="qBalanceNote"><% if (initialQuote.mode === 'quote') { %>Balance <b><%= initialQuote.formatted.balance %></b> due <%= initialQuote.balanceDueDaysBefore %> days before departure<%= initialQuote.balanceDueOn ? ' (by ' + new Date(initialQuote.balanceDueOn).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + ')' : '' %> — never charged automatically.<% } else { %>Send the enquiry and a designer replies with a costed day-by-day within 48 hours.<% } %></p>
+            <p class="sum-note" id="quoteStatus" hidden>Recalculating…</p>
+
+            <div class="paying" style="margin-top:18px">
+              <button class="btn btn--wide btn-pay" type="submit" id="payBtn">
+                <span id="payBtnLabel">Pay deposit &amp; book</span>
+              </button>
+              <p class="small muted" style="margin:12px 0 0;text-align:center">
+                <% if (stripe.mode === 'demo') { %>Demo mode — you will see a simulated payment page instead of Stripe.<% } else { %>Card details go straight to Stripe. We never see or store them.<% } %>
+              </p>
+              <p class="small" style="margin:10px 0 0;text-align:center;letter-spacing:.1em;text-transform:uppercase;font-size:10px;color:var(--ink-50)">Visa · Mastercard · Amex · 3-D Secure</p>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:18px">
+            <h4>Rather not use a form?</h4>
+            <p class="small mb-0">Call <a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneMa %></a> (Morocco) or <a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>" style="text-decoration:underline"><%= config.contact.phoneUsa %></a> (USA), or WhatsApp us — we can hold a date on a verbal yes.</p>
+          </div>
+
+          <div class="callout" style="margin-top:16px">
+            <h4>Group leaders</h4>
+            <p class="small mb-0">One <%= config.deposit.percent %>% deposit for the whole party works, or send each traveller their own card link. We accept POs and split invoices for schools and clubs.</p>
+          </div>
+        </aside>
+      </div>
+    </form>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="section-head"><div><p class="eyebrow">Before you pay</p><h2>The five rules that matter most</h2></div><a class="link-arrow" href="/booking-conditions">Full booking conditions</a></div>
+      <div class="grid grid-3">
+        <% [
+          ['25% now, 75% later','The deposit is ' + config.deposit.percent + '% of the trip cost and is non-refundable. The balance is due ' + config.deposit.balanceDueDaysBefore + ' days before departure — never earlier unless you booked inside that window.'],
+          ['Cancellation is on the total','Charges run from the total trip cost, not the balance: deposit only beyond 90 days, then 50 / 75 / 90 / 100% as the departure approaches.'],
+          ['Insurance is required','Medical, repatriation and cancellation cover. It is what reimburses the charges above, and we ask for the policy number with your balance invoice.'],
+          ['Groups need 10','A published departure that has not reached 10 travellers by 75 days out is offered as a private trip, moved, or refunded in full including the deposit.'],
+          ['Prices are held 21 days','Quotations are firm for 21 days. After that, if the hotels we are holding move, we tell you before taking anything further.'],
+          ['You can pay by link','Every traveller on a group booking can be sent an individual Stripe link for their own share of the deposit.']
+        ].forEach(function(x){ %><div class="callout reveal"><h4><%= x[0] %></h4><p class="small mb-0"><%= x[1] %></p></div><% }) %>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+<script src="/js/booking.js" defer></script>
+</body>
+</html>

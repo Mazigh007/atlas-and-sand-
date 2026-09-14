@@ -1,0 +1,46 @@
+<% const p = booking.pricing; %>
+<%- include('../partials/head') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-block:0;min-height:100vh;background:var(--paper-2);display:grid;place-items:center">
+    <div style="width:min(560px,100% - 32px)">
+      <div class="summary" style="position:static;padding:0;overflow:hidden;box-shadow:var(--shadow)">
+        <div style="padding:18px 22px;border-bottom:1px solid var(--ink-12);display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-50)"><%= config.brand.name %></span>
+          <span class="badge-demo">Simulated Stripe Checkout</span>
+        </div>
+        <div style="padding:26px 22px">
+          <p class="eyebrow" style="margin-bottom:6px">Pay deposit · <%= config.deposit.percent %>% of trip</p>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin-bottom:18px">
+            <h3 style="margin:0;font-size:27px"><%= booking.journeyName %></h3>
+            <span class="price" style="font-size:32px"><%= config.currencySymbol %><%= Number(p.deposit).toLocaleString('en-US') %><span>due today</span></span>
+          </div>
+          <ul class="sum-lines" style="margin-bottom:22px">
+            <li><span>Travellers · nights</span><span><%= p.travellers %> · <%= p.nights %></span></li>
+            <li><span>Trip total</span><span><%= config.currencySymbol %><%= Number(p.tripTotal).toLocaleString('en-US') %></span></li>
+            <li><span>Balance after today</span><span><%= config.currencySymbol %><%= Number(p.balance).toLocaleString('en-US') %></span></li>
+            <li><span>Booking reference</span><span><%= booking.ref %></span></li>
+          </ul>
+
+          <form method="post" action="/booking/demo-pay">
+            <input type="hidden" name="ref" value="<%= booking.ref %>">
+            <label class="field" style="margin-bottom:14px"><span>Email on the receipt</span><input type="email" value="<%= booking.contact.email %>" readonly></label>
+            <label class="field" style="margin-bottom:14px"><span>Card number</span><input type="text" name="card" inputmode="numeric" value="4242 4242 4242 4242" autocomplete="off"><span class="hint">Test card. No network call is made — nothing leaves this server.</span></label>
+            <div class="field-grid">
+              <label class="field"><span>Expiry</span><input type="text" value="12 / 30" autocomplete="off"></label>
+              <label class="field"><span>CVC</span><input type="text" value="123" autocomplete="off"></label>
+            </div>
+            <button class="btn btn--wide" style="margin-top:20px" type="submit">Pay <%= config.currencySymbol %><%= Number(p.deposit).toLocaleString('en-US') %></button>
+            <% if (typeof error === 'string' && error) { %><p class="notice notice--err" style="margin-top:12px"><%= error %></p><% } %>
+            <p class="small muted" style="text-align:center;margin:14px 0 0">Add <code>STRIPE_SECRET_KEY</code> to <code>.env</code> and this page is replaced by real Stripe Checkout — the flow, pricing and webhooks are already wired.</p>
+          </form>
+        </div>
+        <div style="padding:14px 22px;border-top:1px solid var(--ink-12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <a class="small" href="/book?journey=<%= booking.journeySlug || '' %>" style="text-decoration:underline">← Back to my booking form</a>
+          <a class="small" href="/booking-conditions" style="text-decoration:underline">Booking conditions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

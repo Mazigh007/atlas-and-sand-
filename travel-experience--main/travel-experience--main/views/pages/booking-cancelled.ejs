@@ -1,0 +1,43 @@
+<% const p = booking.pricing; %>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-block:clamp(60px,8vw,110px)">
+    <div class="shell--mid">
+      <p class="eyebrow">Payment not completed</p>
+      <h1 class="display" style="font-size:clamp(34px,4.6vw,60px)">No charge was made</h1>
+      <p class="lede">You left Stripe before the payment finished, so nothing has been taken and your booking <b><%= booking.ref %></b> is still sitting as an unpaid proposal. We have held your dates for 24 hours — no penalty, no automatic cancellation.</p>
+
+      <div class="grid grid-2" style="margin-top:34px">
+        <div class="summary" style="position:static">
+          <h3><%= booking.journeyName %></h3>
+          <ul class="sum-lines">
+            <li><span>Per person</span><span><%= config.currencySymbol %><%= Number(p.perPerson).toLocaleString('en-US') %></span></li>
+            <li><span>Trip total · <%= p.travellers %> travellers</span><span><%= config.currencySymbol %><%= Number(p.tripTotal).toLocaleString('en-US') %></span></li>
+            <li><span><%= config.deposit.percent %>% deposit</span><span><b><%= config.currencySymbol %><%= Number(p.deposit).toLocaleString('en-US') %></b></span></li>
+            <li><span>Balance <%= p.balanceDueDaysBefore %> days out</span><span><%= config.currencySymbol %><%= Number(p.balance).toLocaleString('en-US') %></span></li>
+          </ul>
+          <div class="sum-deposit"><div><span>Try again</span><b>No fee for retrying</b></div><a class="btn btn--light" href="/book?journey=<%= booking.journeySlug || '' %>&travellers=<%= p.travellers %>">Reopen form</a></div>
+        </div>
+        <div>
+          <div class="callout">
+            <h4>Or let us do the admin</h4>
+            <p class="small mb-0">Tell us on WhatsApp and we will send a fresh payment link, or invoice your bank in MAD, EUR, GBP or USD — whichever your finance people prefer.</p>
+            <p style="margin-top:14px" class="flex">
+              <a class="btn btn--sm btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Hi — my booking ' + booking.ref + ' was not paid. Can I get a new link?') %>">WhatsApp us</a>
+              <a class="btn btn--sm btn--ghost" href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneMa %></a>
+            </p>
+          </div>
+          <div class="callout" style="margin-top:16px">
+            <h4>If a card was declined</h4>
+            <p class="small mb-0">Usually one of three things: the bank blocks a foreign transaction, the billing address does not match what the bank holds, or the amount exceeds a travel limit. A quick call to your bank fixes it, and we accept two cards for one booking if you need to split it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+</body>
+</html>

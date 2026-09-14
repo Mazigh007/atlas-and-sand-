@@ -1,0 +1,39 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <%- include('../partials/page-hero', { hero: {
+    image: '/img/journal-planning.jpg',
+    kicker: 'Inspirations & planning notes',
+    title: 'The Journal',
+    lede: 'Written by the designers who build the itineraries. No sponsored hotels, no listicles, nothing we would not tell a friend over tea.',
+    crumbs: [{ label: 'Journal' }]
+  } }) %>
+
+  <section class="section">
+    <div class="shell">
+      <% posts.forEach(function(p, i){ %>
+        <a class="card reveal" href="/journal/<%= p.slug %>" style="display:grid;grid-template-columns:<%= i%2 ? '1.05fr .95fr' : '.95fr 1.05fr' %>;background:transparent;border:0;gap:36px;align-items:center;margin-bottom:56px;border-bottom:1px solid var(--ink-12);padding-bottom:56px">
+          <div class="card-media" style="aspect-ratio:16/10;order:<%= i%2 ? 2 : 1 %>"><img src="<%= p.image %>" alt="<%= p.title %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+          <div class="card-body" style="padding:0;order:<%= i%2 ? 1 : 2 %>">
+            <span class="eyebrow eyebrow--plain"><%= p.category %> · <%= new Date(p.date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) %> · <%= p.read %></span>
+            <h3 style="font-size:clamp(28px,3vw,42px)"><%= p.title %></h3>
+            <p style="font-size:16.5px"><%= p.lede %></p>
+            <span class="link-arrow">Read the piece</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section section--tight section--ink">
+    <div class="shell flex between">
+      <div><h3 style="color:#fff;margin:0 0 6px">Prefer someone to just tell you?</h3><p class="small mb-0">Ask the assistant in the corner, or WhatsApp a designer on <%= config.contact.phoneMa %>.</p></div>
+      <a class="btn btn--light" href="/book">Plan my trip</a>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+</body>
+</html>

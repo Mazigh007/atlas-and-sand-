@@ -1,0 +1,80 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+
+  <section class="section" style="padding-top:clamp(64px,7vw,104px)">
+    <div class="shell">
+      <div class="legal-meta">
+        <a href="/sitemap">Sitemap</a>
+        <span><%= kind %></span>
+        <span class="muted">Last updated <%= doc.updated %></span>
+        <span class="doc-nav" style="margin-left:auto">
+          <a class="pill pill--sm" href="/booking-conditions">Booking conditions</a>
+          <a class="pill pill--sm" href="/privacy-policy">Privacy policy</a>
+          <a class="pill pill--sm" href="/legal-terms">Legal terms</a>
+          <a class="pill pill--sm" href="/faq">FAQ</a>
+        </span>
+      </div>
+
+      <div class="layout-detail" style="display:grid;grid-template-columns:230px minmax(0,1fr);gap:clamp(28px,5vw,64px)">
+        <nav aria-label="Sections" class="summary" style="position:sticky;padding:20px">
+          <h4 style="font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 12px">On this page</h4>
+          <% doc.sections.forEach(function(s, i){ %><a href="#s<%= i %>" style="display:block;font-size:13.4px;padding:6px 0;color:var(--ink-70)"><%= s.h %></a><% }) %>
+          <p class="small muted" style="margin:14px 0 0">Questions? <a href="/contact" style="text-decoration:underline"><%= config.contact.emailBookings %></a></p>
+        </nav>
+
+        <article class="prose" style="max-width:78ch">
+          <p class="eyebrow"><%= config.brand.name %> · <%= config.brand.legalName %></p>
+          <h1 class="display" style="font-size:clamp(38px,5vw,68px);margin-bottom:18px"><%= kind %></h1>
+          <% doc.intro.forEach(function(p){ %><p style="font-size:17px;color:var(--ink)"><%= p %></p><% }) %>
+          <% if (doc.controller) { %><div class="callout" style="margin:24px 0"><h4>Data controller</h4><p class="small mb-0"><%= doc.controller %></p></div><% } %>
+
+          <% if (kindSlug === 'booking-conditions') { %>
+            <table class="data" style="margin-top:20px">
+              <thead><tr><th>The short version</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Deposit on booking</td><td><b><%= commercial.depositPercent %>% of trip cost</b> — non-refundable, applied to your final invoice</td></tr>
+                <tr><td>Balance</td><td>Due <b><%= commercial.balanceDueDaysBefore %> days before departure</b>; full amount if you book inside that</td></tr>
+                <tr><td>Minimum notice on a new booking</td><td><%= commercial.minLeadDays %> days (call us and we will try sooner)</td></tr>
+                <tr><td>Amendment fee</td><td>$<%= commercial.amendmentFeePerPerson %> per person, plus any supplier charge</td></tr>
+                <tr><td>Insurance</td><td>Mandatory — cover for medical, repatriation and cancellation</td></tr>
+                <tr><td>Group minimum / maximum</td><td>10 – 30 travellers per departure</td></tr>
+                <tr><td>Price held for</td><td>21 days from the date of the quotation</td></tr>
+              </tbody>
+            </table>
+          <% } %>
+
+          <% doc.sections.forEach(function(s, i){ %>
+            <h2 id="s<%= i %>"><%= s.h %></h2>
+            <% (s.p || []).forEach(function(p){ %><p><%= p %></p><% }) %>
+            <% if (s.list) { %><ul><% s.list.forEach(function(li){ %><li><%= li %></li><% }) %></ul><% } %>
+            <% if (s.table) { %>
+              <table class="data">
+                <thead><tr><% s.table.head.forEach(function(hh){ %><th><%= hh %></th><% }) %></tr></thead>
+                <tbody>
+                  <% s.table.rows.forEach(function(row){ const cells = Array.isArray(row) ? row : Object.keys(row).map(k => row[k]); %><tr><% cells.forEach(function(cell){ %><td><%= cell %></td><% }) %></tr><% }) %>
+                </tbody>
+              </table>
+            <% } %>
+            <% (s.p2 || []).forEach(function(p){ %><p><%= p %></p><% }) %>
+          <% }) %>
+
+          <hr class="rule" style="margin:48px 0 28px">
+          <p class="small muted">This document is provided for the website build as a working template of our commercial terms. Company identifiers, licence numbers and addresses in the footer are placeholders to be replaced with your registered details before you take live payments.</p>
+          <p class="flex">
+            <a class="btn btn--ghost btn--sm" href="/booking-conditions">Booking conditions</a>
+            <a class="btn btn--ghost btn--sm" href="/privacy-policy">Privacy policy</a>
+            <a class="btn btn--ghost btn--sm" href="/legal-terms">Legal terms</a>
+            <a class="btn btn--sm" href="/book">Book a journey</a>
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+</body>
+</html>

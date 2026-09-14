@@ -1,0 +1,91 @@
+<%
+  const waHref = (t) => `https://wa.me/${config.contact.whatsapp}?text=${encodeURIComponent(t || 'Salam! I am looking at Morocco trips and would like a proposal.')}`;
+  const telMa = config.contact.phoneMa.replace(/[^+\d]/g, '');
+  const telUs = config.contact.phoneUsa.replace(/[^+\d]/g, '');
+%>
+
+<!-- ══ Back to top ══════════════════════════════════════════════════════ -->
+<button class="to-top" id="toTop" type="button" aria-label="Back to top">
+  <svg class="to-top-ring" viewBox="0 0 58 58" aria-hidden="true"><circle id="toTopRing" cx="29" cy="29" r="27" stroke-dasharray="169.6" stroke-dashoffset="169.6"></circle></svg>
+  <span class="to-top-label">Back to top</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ══ Travel assistant ═════════════════════════════════════════════════ -->
+<div id="chatWidget"
+     data-page="<%= typeof title !== 'undefined' ? title.replace(/\s*\|\s*Moroccan Experience\s*$/,'') : 'Home' %>"
+     data-journey="<%= typeof j !== 'undefined' && j ? j.name : '' %>"
+     data-agent-mode="<%= agentMode %>"
+     data-pay-mode="<%= stripe.mode %>">
+
+  <button class="chat-launcher" id="chatLauncher" type="button" aria-expanded="false" aria-controls="chatPanel">
+    <span class="ping" aria-hidden="true"></span>
+    <span class="av" aria-hidden="true">م</span>
+    <span class="lbl">Ask a Morocco expert</span>
+  </button>
+
+  <section class="chat-panel" id="chatPanel" role="dialog" aria-modal="false" aria-label="Travel assistant">
+    <header class="chat-head">
+      <span class="av" aria-hidden="true">م</span>
+      <div>
+        <b>Amal · Travel design team</b>
+        <span id="chatStatus">Online — usually replies instantly</span>
+      </div>
+      <button class="chat-x" id="chatClose" type="button" aria-label="Close chat">×</button>
+    </header>
+
+    <div class="chat-quick-links">
+      <a href="<%= waHref() %>" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.4A10 10 0 1 0 12 2Zm5.3 14c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.6-.1-1.3-.4-2.8-1.3-4-2.6-1.1-1.2-1.8-2.5-1.9-3.1-.1-.6.1-1.2.5-1.6.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.4l.7 1.7c.1.2 0 .4-.1.6l-.4.5c-.1.2-.2.3 0 .6.4.7 1.4 1.7 2.4 2.2.3.1.4.1.6-.1l.6-.7c.2-.2.4-.2.6-.1l1.7.8c.3.2.3.4.3.6-.1.1-.1.5-.3 1Z"/></svg>
+        WhatsApp
+      </a>
+      <a href="tel:<%= telMa %>">Call <%= config.contact.phoneMa %></a>
+      <a href="tel:<%= telUs %>">USA <%= config.contact.phoneUsa %></a>
+    </div>
+
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+
+    <div class="chat-suggest" id="chatSuggest"></div>
+
+    <div class="chat-lead" id="chatLead" hidden>
+      <h5>Ask a designer to call</h5>
+      <p>Leave the essentials and we will ring you — no newsletters, no drip campaign.</p>
+      <input id="leadName" type="text" placeholder="Name" autocomplete="name">
+      <input id="leadEmail" type="email" placeholder="Email" autocomplete="email">
+      <input id="leadPhone" type="tel" placeholder="Phone (with country code)" autocomplete="tel">
+      <button class="btn btn--sm btn--wide" id="leadSend" type="button">Send it</button>
+    </div>
+
+    <form class="chat-form" id="chatForm" autocomplete="off">
+      <label class="sr-only" for="chatInput">Message</label>
+      <input id="chatInput" name="message" type="text" placeholder="Ask about journeys, prices, dates…" maxlength="500">
+      <button type="submit" aria-label="Send message">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+    <p class="chat-legal">AI assistant · do not share card numbers, passport numbers or medical detail here. <a href="/privacy-policy" style="text-decoration:underline">Privacy</a></p>
+  </section>
+</div>
+
+<!-- ══ Cookie consent ═══════════════════════════════════════════════════ -->
+<div class="cookie" id="cookieBanner" role="region" aria-label="Cookie settings">
+  <h4>Cookies, the honest version</h4>
+  <p>We need the session ones so your booking form and this chat keep working. Analytics cookies only run if you say yes — and we do not sell anything to advertisers, ever.</p>
+  <div class="cookie-actions">
+    <button type="button" class="yes" data-cookie="all">Accept all</button>
+    <button type="button" data-cookie="essential">Essential only</button>
+    <a href="/privacy-policy" style="align-self:center;font-size:12px">Read the policy</a>
+  </div>
+</div>
+
+<script>
+  window.mxConfig = {
+    whatsapp: '<%= config.contact.whatsapp %>',
+    phoneMa: '<%= config.contact.phoneMa %>',
+    phoneUsa: '<%= config.contact.phoneUsa %>',
+    email: '<%= config.contact.emailBookings %>',
+    depositPercent: <%= config.deposit.percent %>,
+    agentMode: '<%= agentMode %>'
+  };
+</script>
+<script src="/js/chat.js" defer></script>

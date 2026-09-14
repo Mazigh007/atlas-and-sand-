@@ -1,0 +1,25 @@
+{
+  "name": "moroccan-experience",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Moroccan Experience — tailor-made luxury travel in Morocco. Private, Luxury, Bespoke & Group journeys with Stripe deposit booking.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js",
+    "reset:store": "rm -f data/store/*.json && node -e \"require('./src/services/db')\" && echo store reset"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "pg": "^8.23.0",
+    "stripe": "^16.9.0"
+  }
+}

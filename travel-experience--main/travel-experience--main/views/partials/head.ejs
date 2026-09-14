@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title>
+<meta name="description" content="<%= desc %>">
+<link rel="canonical" href="<%= canonical %>">
+<meta name="theme-color" content="#171310">
+<% if (typeof noIndex !== 'undefined' && noIndex) { %><meta name="robots" content="noindex,nofollow"><% } else { %><meta name="robots" content="index,follow,max-image-preview:large"><% } %>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="<%= config.brand.name %>">
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= desc %>">
+<meta property="og:url" content="<%= canonical %>">
+<meta property="og:image" content="<%= config.siteUrl %>/img/hero-desert.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= title %>">
+<meta name="twitter:description" content="<%= desc %>">
+<meta name="twitter:image" content="<%= config.siteUrl %>/img/hero-desert.jpg">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..600&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="/css/styles.css?v=<%= config.assetVersion %>">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TravelAgency",
+  "name":"<%= config.brand.name %>",
+  "description":"<%= config.brand.baseline %>. <%= config.brand.tagline %>",
+  "url":"<%= config.siteUrl %>",
+  "logo":"<%= config.siteUrl %>/img/favicon.svg",
+  "foundingDate":"<%= config.brand.foundedYear %>",
+  "telephone":"<%= config.contact.phoneMa %>",
+  "email":"<%= config.contact.emailBookings %>",
+  "priceRange":"$$$",
+  "address":{"@type":"PostalAddress","streetAddress":"<%= config.brand.address.line1 %>","addressLocality":"Marrakech","postalCode":"40000","addressCountry":"MA"},
+  "contactPoint":[
+    {"@type":"ContactPoint","telephone":"<%= config.contact.phoneMa %>","contactType":"reservations","areaServed":"Worldwide","availableLanguage":["en","fr","es","ar"]},
+    {"@type":"ContactPoint","telephone":"<%= config.contact.phoneUsa %>","contactType":"customer service","areaServed":"US"}
+  ],
+  "sameAs":[<% config.brand.social.forEach(function(s,i){ %>"<%= s.url %>"<%= i < config.brand.social.length-1 ? ',' : '' %><% }) %>]
+}
+</script>
+<script type="application/ld+json">
+{ "@context":"https://schema.org","@type":"WebSite","name":"<%= config.brand.name %>","url":"<%= config.siteUrl %>","potentialAction":{"@type":"SearchAction","target":"<%= config.siteUrl %>/search?q={query}","query-input":"required name=query"} }
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>

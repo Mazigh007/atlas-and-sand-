@@ -1,0 +1,74 @@
+<%
+  const wa = (t) => `https://wa.me/${config.contact.whatsapp}?text=${encodeURIComponent(t || 'Salam! I am looking at journeys on moroccanexperience.com and would like a proposal.')}`;
+%>
+<div class="topbar">
+  <div class="shell">
+    <span class="topbar-hide-sm"><span class="topbar-dot"></span>Travel designers online — replies in ~20 minutes</span>
+    <span class="topbar-cluster">
+      <a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>" class="topbar-hide-sm">Marrakech <%= config.contact.phoneMa %></a>
+      <a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>">USA <%= config.contact.phoneUsa %></a>
+      <a href="<%= wa() %>" rel="noopener">WhatsApp</a>
+      <a href="/faq" class="topbar-hide-sm">Booking FAQ</a>
+    </span>
+  </div>
+</div>
+
+<header class="site-header" id="siteHeader">
+  <div class="shell nav-bar">
+    <a class="brand" href="/" aria-label="<%= config.brand.name %> — home">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" fill="none">
+        <path d="M32 2 40 12l14-2-2 14 10 8-10 8 2 14-14-2-8 10-8-10-14 2 2-14L0 32l10-8-2-14 14 2Z" fill="currentColor" opacity=".12"/>
+        <path d="M32 6 39 15l13-2-2 13 8 6-8 6 2 13-13-2-7 9-7-9-13 2 2-13-8-6 8-6-2-13 13 2Z" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="32" cy="32" r="6.4" stroke="currentColor" stroke-width="1.4"/>
+      </svg>
+      <span class="brand-text">Moroccan <em>Experience</em><span class="brand-sub">Tailor-made journeys · Est. <%= config.brand.foundedYear %></span></span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav" id="primaryNav">
+        <% config.nav.forEach(function(item){ %>
+          <li<%= item.children ? ' data-mega' : '' %>>
+            <% if (item.children) { %>
+              <button type="button" aria-expanded="false" aria-haspopup="true"><%= item.label %> <span class="caret"></span></button>
+              <div class="mega">
+                <div class="shell mega-inner">
+                  <% item.children.forEach(function(c){ %>
+                    <div class="mega-item"><a href="<%= c.href %>"><%= c.label %></a><p><%= c.blurb %></p></div>
+                  <% }) %>
+                  <div class="mega-item mega-promo">
+                    <h4>Not sure which fits?</h4>
+                    <p>Answer three questions and a Marrakech designer sends a costed day-by-day within 48 hours — no planning fee, no obligation.</p>
+                    <p style="margin-top:16px"><a class="link-arrow" style="color:#fff;border-color:rgba(255,255,255,.4)" href="/book">Plan my trip</a></p>
+                  </div>
+                </div>
+              </div>
+            <% } else { %>
+              <a href="<%= item.href %>"<%= path === item.href ? ' aria-current="page"' : '' %>><%= item.label %></a>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn btn--sm btn--ink" href="/book">Plan my trip</a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="shell--narrow" style="margin:0">
+    <% config.nav.forEach(function(item){ %>
+      <a href="<%= item.href %>"><%= item.label %></a>
+      <% if (item.children) { item.children.forEach(function(c){ %><a class="mn-sub" href="<%= c.href %>"><%= c.label %> — <span class="muted"><%= c.blurb %></span></a><% }) } %>
+    <% }) %>
+    <div class="mn-label">Talk to us</div>
+    <a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneMa %></a>
+    <span class="mn-sub">Marrakech office · also on WhatsApp</span>
+    <a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneUsa %></a>
+    <span class="mn-sub">USA office · phone &amp; WhatsApp</span>
+    <a href="<%= wa() %>">Message us on WhatsApp</a>
+    <a href="/book" class="btn btn--wide">Plan my trip</a>
+  </div>
+</div>

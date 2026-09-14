@@ -1,0 +1,88 @@
+<%
+  const p = booking.pricing;
+  const paid = booking.status === 'deposit_paid' || status === 'paid';
+  const isEnquiry = booking.mode === 'enquiry';
+%>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<main id="main" tabindex="-1">
+  <section class="section" style="padding-block:clamp(56px,7vw,104px)">
+    <div class="shell--mid">
+      <p class="eyebrow"><%= paid ? 'Deposit received · thank you' : (isEnquiry ? 'Enquiry received' : 'Held for you — payment outstanding') %></p>
+      <h1 class="display" style="font-size:clamp(36px,5vw,66px);margin-bottom:16px">
+        <% if (paid) { %>Your Morocco is now real.<% } else if (isEnquiry) { %>We have it. A designer is on it.<% } else { %>Your place is pencilled in.<% } %>
+      </h1>
+      <p class="lede">
+        <% if (paid) { %>Reference <b><%= booking.ref %></b>. Your <%= config.deposit.percent %>% deposit of <b><%= config.currencySymbol %><%= Number(p.deposit).toLocaleString('en-US') %></b> has cleared, and we are confirming rooms, guides and vehicles now — expect your full document pack in your inbox within 48 hours.<% } else if (isEnquiry) { %>Reference <b><%= booking.ref %></b>. Nothing has been charged. One of our Marrakech designers will send a costed day-by-day, usually within 24 – 48 hours, and it is yours to keep whether or not you book.<% } else { %>Reference <b><%= booking.ref %></b>. Nothing was charged — a designer holds your dates for 24 hours while you decide, and will e-mail the proposal with the <%= config.deposit.percent %>% payment link.<% } %>
+      </p>
+
+      <div class="grid grid-2" style="margin-top:38px">
+        <div class="summary" style="position:static">
+          <h3>What you told us</h3>
+          <ul class="sum-lines">
+            <li><span>Reference</span><span><b><%= booking.ref %></b></span></li>
+            <li><span>Journey</span><span><%= booking.journeyName %></span></li>
+            <li><span>Type</span><span><%= booking.category %><%= booking.audience ? ' · ' + booking.audience : '' %></span></li>
+            <li><span>Party</span><span><%= p.travellers %> traveller<%= p.travellers>1?'s':'' %> · <%= p.nights %> nights</span></li>
+            <li><span>Departure</span><span><%= p.startDate ? new Date(p.startDate+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : 'Flexible' %></span></li>
+            <li><span>Name</span><span><%= booking.contact.title %> <%= booking.contact.firstName %> <%= booking.contact.lastName %></span></li>
+            <li><span>Email</span><span><%= booking.contact.email %></span></li>
+            <li><span>Phone</span><span><%= booking.contact.phone %></span></li>
+          </ul>
+          <% if (!isEnquiry && p.tripTotal) { %>
+            <div class="sum-total"><span>Trip total</span><span><%= config.currencySymbol %><%= Number(p.tripTotal).toLocaleString('en-US') %></span></div>
+            <ul class="sum-lines">
+              <li class="disc"><span>Paid now — <%= config.deposit.percent %>% deposit</span><span><%= paid ? config.currencySymbol + Number(p.deposit).toLocaleString('en-US') : 'outstanding' %></span></li>
+              <li><span>Balance due <%= p.balanceDueDaysBefore %> days before departure</span><span><%= config.currencySymbol %><%= Number(p.balance).toLocaleString('en-US') %></span></li>
+            </ul>
+          <% } %>
+          <p class="sum-note">Status: <b><%= booking.status.replace(/_/g,' ') %></b><% if (booking.paymentProvider === 'demo') { %> · recorded in demo mode<% } %>. Keep the reference — every invoice and message uses it.</p>
+        </div>
+
+        <div>
+          <div class="callout">
+            <h4>What happens next</h4>
+            <ol class="check-list" style="list-style:decimal;padding-left:20px">
+              <% if (paid) { %>
+                <li>Rooms, guides and transfers confirmed in writing — 2 to 5 working days.</li>
+                <li>Your document pack: day-by-day, property names, packing note, the etiquette briefing.</li>
+                <li>A WhatsApp thread with your lead guide and the 24/7 duty number.</li>
+                <li>Balance invoice at <%= p.balanceDueDaysBefore %> days before departure.</li>
+              <% } else if (isEnquiry) { %>
+                <li>A designer reads it — genuinely reads it — and writes back with questions.</li>
+                <li>A costed day-by-day within 48 hours, no obligation, no planning fee.</li>
+                <li>You approve it, then pay the <%= config.deposit.percent %>% deposit to lock inventory.</li>
+              <% } else { %>
+                <li>We hold the dates for 24 hours while the proposal is prepared.</li>
+                <li>Pay the <%= config.deposit.percent %>% deposit from the link in your e-mail, or call us.</li>
+                <li>Rooms and guides confirmed once the deposit clears.</li>
+              <% } %>
+            </ol>
+          </div>
+
+          <div class="callout" style="margin-top:16px">
+            <h4>Speak to us now</h4>
+            <p class="small mb-0">
+              <a class="btn btn--sm btn--whatsapp" style="margin:4px 6px 4px 0" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Hi — reference ' + booking.ref + '.') %>">WhatsApp <%= config.contact.phoneMa %></a>
+              <a class="btn btn--sm btn--ghost" style="margin:4px 0" href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>">USA <%= config.contact.phoneUsa %></a>
+            </p>
+            <p class="small" style="margin:12px 0 0"><a href="mailto:<%= config.contact.emailBookings %>?subject=<%= encodeURIComponent('Booking ' + booking.ref) %>" style="text-decoration:underline">E-mail <%= config.contact.emailBookings %></a></p>
+          </div>
+
+          <p class="flex" style="margin-top:20px">
+            <a class="btn btn--ghost btn--sm" href="/booking/<%= booking.ref %>.ics">Add to calendar</a>
+            <a class="btn btn--ghost btn--sm" href="/booking/lookup">Check status later</a>
+            <button class="btn btn--ghost btn--sm" type="button" onclick="window.print()">Print</button>
+          </p>
+        </div>
+      </div>
+
+      <hr class="rule" style="margin-block:44px">
+      <p class="small muted">A reminder of the important ones: <a href="/booking-conditions" style="text-decoration:underline">booking conditions</a> (deposit, balance, cancellation), <a href="/privacy-policy" style="text-decoration:underline">privacy policy</a>, <a href="/legal-terms" style="text-decoration:underline">legal terms</a>. Payment was processed by Stripe; we do not hold your card details.</p>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header', { heroDark: true }) %>
+
+<main id="main" tabindex="-1">
+
+  <!-- ══ hero ══ -->
+  <section class="hero hero--tall" data-slideshow>
+    <div class="hero-media">
+      <div class="hero-slide is-active"><img src="/img/hero-desert.jpg" alt="Luxury desert camp in the Moroccan Sahara at dusk" fetchpriority="high"></div>
+      <div class="hero-slide"><img src="/img/hero-riad.jpg" alt="Courtyard of a Marrakech riad in morning light"></div>
+      <div class="hero-slide"><img src="/img/hero-medina.jpg" alt="Rooftops over the medina of Fes at golden hour"></div>
+    </div>
+    <div class="shell hero-inner">
+      <p class="eyebrow" style="color:rgba(255,255,255,.72)">The Morocco travel experts · Marrakech &amp; Los Angeles</p>
+      <h1 class="display">Tailor-made<br>Morocco, <em style="font-style:italic">around you</em></h1>
+      <p class="lede">Private, luxury, bespoke and group journeys designed one at a time since <%= config.brand.foundedYear %>. No templates, no coach parties you did not ask for — and a 25% deposit that holds real rooms.</p>
+      <div class="hero-actions">
+        <a class="btn" style="background:#fff;border-color:#fff;color:var(--ink)" href="/journeys">Explore our journeys</a>
+        <a class="btn btn--light" href="/book">Plan my trip</a>
+      </div>
+      <div class="hero-foot">
+        <span>Luxury from <b style="color:#fff">$6,000</b> pp · 7 days</span>
+        <span>Groups <b style="color:#fff">$2,000–$4,000</b> pp · 10–30 travellers</span>
+        <span>Private from <b style="color:#fff">$2,400</b> pp</span>
+        <span><a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>" style="border-bottom:1px solid rgba(255,255,255,.4)"><%= config.contact.phoneMa %></a></span>
+      </div>
+    </div>
+    <span class="hero-scroll" aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- ══ ticker ══ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <% for (let pass=0; pass<2; pass++) { %>
+        <% destinations.forEach(function(d){ %><span class="ticker-item"><a href="/destinations/<%= d.slug %>"><%= d.name %></a></span><% }) %>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ══ intro ══ -->
+  <section class="section">
+    <div class="shell split">
+      <div>
+        <p class="eyebrow">Every journey starts with a feeling</p>
+        <h2>Most people plan a trip by listing places.<br><span class="serif-i">We start with how you want to feel.</span></h2>
+        <p class="lede">Morocco is not one country but six: the noise of Marrakech, the silence of Erg Chebbi, the blue calm of Chefchaouen, salt wind on the Atlantic, cedar and snow in the Middle Atlas, Roman ruin in the plain. Two travellers can spend ten days here and come home with entirely different memories.</p>
+        <p>So we ask questions before we send an itinerary. Who is coming, what you eat, how early you wake, whether a hammam sounds like a treat or an ordeal. Then one designer — named, reachable, salaried, in Marrakech — builds it, prices it honestly and takes a 25% deposit when you say yes.</p>
+        <p>For twenty years we have been recognised as one of the country's leading tailor-made operators, with journeys designed for couples, families, solo travellers, student groups and parties of up to thirty.</p>
+        <p class="flex" style="margin-top:26px">
+          <a class="btn" href="/why-us">How we work</a>
+          <a class="link-arrow" href="/about">Meet the team</a>
+        </p>
+      </div>
+      <div>
+        <div class="img-frame img-frame--34 reveal">
+          <img src="/img/story-guides.jpg" alt="A Moroccan guide and travellers on a rooftop in Marrakech" loading="lazy" onerror="this.classList.add('is-missing')">
+        </div>
+        <div class="callout" style="margin-top:18px">
+          <p class="small" style="margin:0"><span class="stars" style="display:block;margin-bottom:6px">★★★★★</span>
+          <span class="serif-i" style="font-size:19px">“A dream come true — small riads, a mountain fortress, a desert oasis. Nothing was left to chance.”</span><br><br><b>Kim</b>, Bespoke Atlas expedition · 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ journey families ══ -->
+  <section class="section section--tight section--paper">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Four ways to travel with us</p>
+          <h2>Choose the shape of the trip.<br>We will do the rest.</h2>
+        </div>
+        <p>Every one of them is tailor-made. The difference is who is in the vehicle, how fixed the dates are, and how much you spend per person.</p>
+      </div>
+      <div class="grid grid-4">
+        <% ['private','luxury','bespoke','group'].forEach(function(k){ const t = tourTypes[k]; %>
+          <a class="tile reveal" href="/tours/<%= t.slug %>">
+            <img src="<%= t.hero %>" alt="<%= t.name %>" loading="lazy" onerror="this.classList.add('is-missing')">
+            <div class="tile-body">
+              <span class="tag tag--light" style="margin-bottom:9px"><%= t.eyebrow %></span>
+              <h3><%= t.name %></h3>
+              <p><%= t.from ? `$${t.from.toLocaleString('en-US')}${t.to ? '–$' + t.to.toLocaleString('en-US') : ''} pp` : '' %> · <%= t.unit.split('·').slice(-1)[0].trim() %></p>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ featured journeys ══ -->
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Explore our journeys</p>
+          <h2>Remarkable itineraries<br>to inspire the mind</h2>
+        </div>
+        <div class="pill-row">
+          <a class="pill" href="/journeys?type=private">Private</a>
+          <a class="pill" href="/journeys?type=luxury">Luxury</a>
+          <a class="pill" href="/journeys?type=bespoke">Bespoke</a>
+          <a class="pill" href="/journeys?type=group">Group</a>
+          <a class="pill is-active" href="/journeys">View all <%= journeys.length %></a>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <% heroJourneys.forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %>
+      </div>
+      <p class="flex" style="justify-content:center;margin-top:44px">
+        <a class="btn btn--ghost" href="/journeys">All journeys &amp; dates</a>
+        <a class="link-arrow" href="/book">Or build your own</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ group audiences ══ -->
+  <section class="section section--ink">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Group journeys · 10 – 30 travellers</p>
+          <h2>Women-only, students,<br>and those who travel slowly</h2>
+        </div>
+        <p>Three fixed-departure groups, one price band: $2,000 – $4,000 per person. The bigger the party, the lower the per-person price — and we never run one below ten travellers.</p>
+      </div>
+      <div class="grid grid-3">
+        <% ['women','students','seniors'].forEach(function(k){ const a = audiences[k]; %>
+          <a class="tile reveal" href="/tours/group/<%= a.slug %>" style="color:#fff">
+            <img src="<%= a.hero %>" alt="<%= a.name %>" loading="lazy" onerror="this.classList.add('is-missing')">
+            <div class="tile-body">
+              <span class="tag tag--light" style="margin-bottom:8px"><%= a.eyebrow %></span>
+              <h3><%= a.name %></h3>
+              <p>$<%= a.from.toLocaleString('en-US') %>–$<%= a.to.toLocaleString('en-US') %> pp · <%= a.lede.split('.')[0] %>.</p>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+      <p class="flex" style="margin-top:36px"><a class="btn btn--light" href="/tours/group">How group departures work</a><a class="btn btn--light" href="/book?category=group&amp;travellers=20">Price my group</a></p>
+    </div>
+  </section>
+
+  <!-- ══ badges ══ -->
+  <section class="section--tight" style="padding-block:0">
+    <div class="shell">
+      <div class="badges">
+        <% badges.forEach(function(b){ %>
+          <div class="badge">
+            <svg class="badge-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 2.5 14.4 8l5.6.6-4.2 3.8 1.2 5.6L12 15.3l-5 2.7 1.2-5.6L4 8.6 9.6 8Z"/></svg>
+            <h4><%= b.title %></h4><p><%= b.text %></p>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ reviews ══ -->
+  <section class="section">
+    <div class="shell--mid">
+      <p class="eyebrow" style="justify-content:center">What travellers say</p>
+      <div class="carousel" data-carousel>
+        <div class="carousel-track">
+          <% reviews.forEach(function(r){ %>
+            <div class="carousel-slide">
+              <div class="quote-card">
+                <div class="stars">★★★★★</div>
+                <blockquote>“<%= r.quote %>”</blockquote>
+                <cite><%= r.name %> · <%= r.from %></cite>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <div class="carousel-dots" role="tablist" aria-label="Reviews"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ destinations ══ -->
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Where to go, and when</p>
+          <h2>Eight Moroccos</h2>
+        </div>
+        <p>We are based in one of them and know the other seven well enough to tell you which deserve your nights.</p>
+      </div>
+      <div class="grid grid-4">
+        <% destinations.slice(0,8).forEach(function(d,i){ %>
+          <a class="tile reveal" href="/destinations/<%= d.slug %>" style="aspect-ratio:<%= i%3===1 ? '3/4' : '4/5' %>">
+            <img src="<%= d.image %>" alt="<%= d.name %>" loading="lazy" onerror="this.classList.add('is-missing')">
+            <div class="tile-body"><h3><%= d.name %></h3><p><%= d.best %></p></div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ pursuit of feeling ══ -->
+  <section class="section">
+    <div class="shell split">
+      <div class="img-frame img-frame--43 reveal">
+        <img src="/img/journey-luxury-camp.jpg" alt="A private camp on the high dunes of Erg Chebbi" loading="lazy" onerror="this.classList.add('is-missing')">
+      </div>
+      <div>
+        <p class="eyebrow">The Pursuit of Feeling</p>
+        <h2>It is not where you want to go.<br>It is how you want to feel.</h2>
+        <p class="lede">Our whole catalogue is built on that sentence. A week in the dunes is about vastness. The medina of Fes is about curiosity. A hammam in Marrakech at 4 p.m. in July is about being entirely, unapologetically still.</p>
+        <p>Tell us the feeling and we will choose the itinerary — the riad, the guide, the hour of the day we put you in each place. It is a slightly odd way to run a travel company and the reason people come back to us for a third and fourth trip.</p>
+        <p class="flex" style="margin-top:24px"><a class="btn" href="/book?feeling=1">Start with a feeling</a><a class="link-arrow" href="/journal/how-to-plan-a-trip-to-morocco">How to plan Morocco</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ press ══ -->
+  <section class="section section--tight section--paper">
+    <div class="shell">
+      <div class="press-strip">
+        <% press.forEach(function(p){ %><div class="press-quote reveal"><p>“<%= p.quote %>”</p><span><%= p.source %></span></div><% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ luxury band ══ -->
+  <section class="section">
+    <div class="shell">
+      <div class="split split--text-left">
+        <div>
+          <p class="eyebrow">Luxury tours</p>
+          <h2>From <span style="white-space:nowrap">$6,000</span> per person, seven days</h2>
+          <p class="lede">That is not a teaser rate for a shared coach tour. It is the entry price for a private 4×4 and guide, palace or riad suites, a staffed desert camp moved for you between nights, a chef, every entrance fee, and a senior designer on WhatsApp at any hour.</p>
+          <ul class="check-list">
+            <% tourTypes.luxury.bullets.slice(0,5).forEach(function(b){ %><li><%= b %></li><% }) %>
+          </ul>
+          <p class="flex"><a class="btn" href="/tours/luxury">See what luxury means here</a><a class="link-arrow" href="/journeys/luxury-sahara-under-the-stars">Our signature 7 days</a></p>
+        </div>
+        <div class="grid grid-2">
+          <% journeys.filter(j=>j.category==='luxury').forEach(function(j){ %><%- include('../partials/journey-card', { j: j }) %> <% }) %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ custom trip ══ -->
+  <section class="section section--tight">
+    <div class="shell">
+      <a class="tile reveal" href="/book" style="aspect-ratio:24/9;display:block">
+        <img src="/img/tour-bespoke.jpg" alt="Designing a bespoke Morocco itinerary" loading="lazy" onerror="this.classList.add('is-missing')">
+        <div class="tile-body" style="background:linear-gradient(90deg,rgba(12,9,7,.86),rgba(12,9,7,.25) 60%,transparent);padding:clamp(28px,5vw,72px);display:grid;place-content:center;min-height:100%;align-content:center">
+          <div style="max-width:620px">
+            <span class="tag tag--light" style="margin-bottom:14px">Bespoke · no itinerary on file</span>
+            <h2 style="color:#fff;margin-bottom:12px">Create your own itinerary</h2>
+            <p style="font-size:17px;color:rgba(255,255,255,.82);margin-bottom:22px">Our travel designers will build a completely bespoke Morocco journey around what you ask for. Textile research in the Rif, a wedding in a kasbah, a desert shoot at new moon — tell us badly and we will make it precise.</p>
+            <span class="btn" style="background:#fff;color:var(--ink);border-color:#fff">Create trip</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ journal ══ -->
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="section-head">
+        <div><p class="eyebrow">The journal</p><h2>Read this before you book</h2></div>
+        <a class="link-arrow" href="/journal">All articles</a>
+      </div>
+      <div class="grid grid-3">
+        <% posts.slice(0,3).forEach(function(p){ %>
+          <a class="card reveal" href="/journal/<%= p.slug %>" style="background:transparent;border:0">
+            <div class="card-media" style="aspect-ratio:16/10"><img src="<%= p.image %>" alt="<%= p.title %>" loading="lazy" onerror="this.classList.add('is-missing')"></div>
+            <div class="card-body" style="padding-left:0;padding-right:0">
+              <span class="eyebrow eyebrow--plain" style="margin:0"><%= p.category %> · <%= p.read %></span>
+              <h3 style="font-size:26px"><%= p.title %></h3>
+              <p><%= p.lede %></p>
+              <span class="link-arrow">Read</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ contact strip ══ -->
+  <section class="section section--ink section--tight">
+    <div class="shell flex between" style="gap:26px">
+      <div>
+        <h3 style="color:#fff;margin-bottom:6px">Rather just talk to someone?</h3>
+        <p class="small mb-0" style="margin:0">Marrakech 08:30–19:30, Los Angeles 07:00–17:00, and a 24/7 line while you travel.</p>
+      </div>
+      <div class="flex" style="gap:12px">
+        <a class="btn btn--light" href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>">Call <%= config.contact.phoneMa %></a>
+        <a class="btn btn--light" href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>">USA <%= config.contact.phoneUsa %></a>
+        <a class="btn btn--whatsapp" href="https://wa.me/<%= config.contact.whatsapp %>?text=<%= encodeURIComponent('Salam! I would like a Morocco proposal.') %>">WhatsApp us</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>
+<%- include('../partials/widgets') %>
+<script src="/js/site.js?v=<%= config.assetVersion %>" defer></script>
+</body>
+</html>

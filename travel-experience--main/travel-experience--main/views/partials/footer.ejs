@@ -1,0 +1,64 @@
+<footer class="site-footer">
+  <div class="shell footer-top">
+    <div class="footer-brand">
+      <span class="brand-text">Moroccan <em>Experience</em></span>
+      <p style="margin-top:14px"><%= config.brand.baseline %>. <%= config.brand.tagline %></p>
+      <p class="small" style="max-width:30ch"><%= config.brand.address.line1 %><br><%= config.brand.address.line2 %><br><span class="muted"><%= config.brand.address.line3 %></span></p>
+      <div class="social" aria-label="Social links">
+        <% config.brand.social.forEach(function(s){ %><a href="<%= s.url %>" rel="noopener" aria-label="<%= s.label %>"><%= s.label.slice(0,2).toUpperCase() %></a><% }) %>
+      </div>
+      <h4 style="margin-top:30px">One letter a month</h4>
+      <p class="small" style="margin:0">Where the light is good right now, what is open, and the two or three things worth changing your dates for.</p>
+      <form class="newsletter" data-newsletter>
+        <label class="sr-only" for="nl-email">Email address</label>
+        <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="small muted" data-newsletter-note style="min-height:1.2em;margin:9px 0 0"></p>
+    </div>
+
+    <% config.footerColumns.forEach(function(col){ %>
+      <div>
+        <h4><%= col.title %></h4>
+        <ul>
+          <% col.links.forEach(function(l){ %><li><a href="<%= l.href %>"><%= l.label %></a></li><% }) %>
+        </ul>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="shell" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:40px">
+    <div class="footer-contact">
+      <h4>Reservations &amp; enquiries</h4>
+      <b><a href="tel:<%= config.contact.phoneMa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneMa %></a></b>
+      <p class="small" style="margin:2px 0 12px">Marrakech team — phone &amp; WhatsApp</p>
+      <b><a href="tel:<%= config.contact.phoneUsa.replace(/[^+\d]/g,'') %>"><%= config.contact.phoneUsa %></a></b>
+      <p class="small" style="margin:2px 0 12px">USA office — phone &amp; WhatsApp</p>
+      <p class="small" style="margin:0"><a href="mailto:<%= config.contact.emailBookings %>"><%= config.contact.emailBookings %></a></p>
+    </div>
+    <div>
+      <h4>Opening hours</h4>
+      <% config.contact.hours.forEach(function(h){ %><p class="small" style="margin:0 0 10px"><b style="color:#fff;font-weight:500"><%= h.tz %></b><br><%= h.days %> · <%= h.time %></p><% }) %>
+      <p class="small" style="margin:0"><%= config.contact.emergencyNote %></p>
+    </div>
+    <div>
+      <h4>Paying for your trip</h4>
+      <p class="small" style="margin:0 0 10px">A 25% deposit secures your journey, the balance falls due <%= config.deposit.balanceDueDaysBefore %> days before departure. Cards are taken by Stripe — we never see your card number.</p>
+      <p class="small" style="letter-spacing:.14em;text-transform:uppercase;margin:0">Visa · Mastercard · Amex · Bank transfer</p>
+      <% if (stripe.mode === 'demo') { %><p class="small" style="margin-top:12px"><span class="badge-demo">Demo payment mode</span></p><% } %>
+    </div>
+  </div>
+
+  <div class="shell footer-bottom">
+    <span>© <%= year %> <%= config.brand.legalName %>. <%= config.brand.licences.join(' · ') %></span>
+    <nav aria-label="Legal">
+      <a href="/booking-conditions">Booking conditions</a>
+      <a href="/privacy-policy">Privacy policy</a>
+      <a href="/legal-terms">Legal terms</a>
+      <a href="/faq">FAQ</a>
+      <a href="/sitemap">Sitemap</a>
+      <a href="/sitemap.xml">XML sitemap</a>
+      <a href="#" data-open-cookie-settings>Cookie settings</a>
+    </nav>
+  </div>
+</footer>
